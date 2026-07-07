@@ -108,9 +108,9 @@
 
 <header>
   <div class="wrap">
-    <div class="eyebrow">Mental model / our version</div>
-    <h1>Memory as a <em>living loop</em>, not geology</h1>
-    <p class="lede">Google modeled agent memory as sediment settling under gravity into permanent bedrock. That is a picture of <b>storage</b>. Here is the same substrate drawn as what our thesis actually claims it is: a closed loop that keeps reconstructing a self.</p>
+    <div class="eyebrow">The substrate model</div>
+    <h1>Memory as a <em>living loop</em></h1>
+    <p class="lede">Agent memory is not a store you write to and read back. In this model the substrate is a <b>closed loop that continuously reconstructs a self</b>: the stream flows in, is gated by goals, consolidates into a revisable web, and is regrown on the way out. The self at the center is remade by every pass.</p>
   </div>
 </header>
 
@@ -179,7 +179,7 @@
         <circle cx="404" cy="508" r="4.5"/><circle cx="368" cy="530" r="4.5"/><circle cx="338" cy="534" r="4.5"/>
       </g>
       <text x="360" y="576" font-family="var(--serif)" font-size="16.5" font-weight="600" fill="var(--ink)" text-anchor="middle">REVISABLE SUBSTRATE</text>
-      <text x="360" y="594" font-family="var(--sans)" font-size="12.5" fill="var(--muted)" text-anchor="middle">a knowledge web, not permanent bedrock</text>
+      <text x="360" y="594" font-family="var(--sans)" font-size="12.5" fill="var(--muted)" text-anchor="middle">a knowledge web that can be rewritten</text>
 
       <!-- co-emergence: bidirectional spokes on vertical axis -->
       <g stroke="var(--life)" stroke-width="1.6" stroke-dasharray="2 4" opacity="0.85">
@@ -219,55 +219,54 @@
       <div class="el">
         <div class="name"><i style="background:var(--faint)"></i>The Stream</div>
         <div class="role">world in</div>
-        <div class="desc">Raw prompts, tool outputs, events. Transient and unstructured. <b>The one place we fully agree with Google.</b></div>
+        <div class="desc">Raw prompts, tool outputs, and events arriving in real time. <b>Transient and unstructured</b>, most of it is meant to pass straight through without being kept.</div>
       </div>
       <div class="el">
         <div class="name"><i style="background:var(--life)"></i>Working-Self Gate</div>
         <div class="role">goal + salience</div>
-        <div class="desc">A filter every item crosses in <b>both directions</b>: what gets encoded, and what is allowed to surface, is decided by current goals and emotional weight. Geology has no gate; sediment settles goal-blind.</div>
+        <div class="desc">A filter every item crosses in <b>both directions</b>. What gets encoded, and what is allowed to surface, is decided by the agent's current goals and the emotional weight of the experience, never by raw similarity alone.</div>
       </div>
       <div class="el">
         <div class="name"><i style="background:var(--accent)"></i>Revisable Substrate</div>
         <div class="role">knowledge web</div>
-        <div class="desc">Consolidated, interconnected, and <b>rewritable</b>. Facts get superseded, the self can forget. Google's "permanent bedrock" bakes in stale knowledge and, by our own conservatism principle, will distort new input to protect itself.</div>
+        <div class="desc">Consolidated, interconnected, and <b>rewritable</b>. Facts get superseded and the self can forget. Permanence would be a liability: a base that cannot revise itself would, by the conservatism principle, start distorting new input to protect what it already holds.</div>
       </div>
       <div class="el">
         <div class="name"><i style="background:var(--accent-2)"></i>Reconstruct</div>
         <div class="role">the bowtie</div>
-        <div class="desc">The transform on the retrieval arc. A compressed engram is <b>regrown for the present moment</b>, not returned as a raw core sample. Retrieval is generation.</div>
+        <div class="desc">The transform on the retrieval arc. A compressed engram is <b>regrown for the present moment</b>, not returned as a raw record. Retrieval is generation, not lookup.</div>
       </div>
       <div class="el">
         <div class="name"><i style="background:var(--life-2)"></i>Narrative Self</div>
         <div class="role">the core</div>
-        <div class="desc">Everything circulates around an <b>evolving self-model</b>: not "what I know about the user" but "who I am in this relationship." It updates from every act. Google stores a user profile and has no self at all.</div>
+        <div class="desc">Everything circulates around an <b>evolving self-model</b>: not "what I know about the user" but "who I am in this relationship." A user profile is a record the agent holds. This is the agent, and it updates from every act.</div>
       </div>
     </div>
 
     <div class="engine">
-      <h3>The engine: a real cycle, not gravity</h3>
-      <p>We keep the one thing Google got genuinely right. A <b>background consolidation process</b> still pulls the stream down, strips token noise, and compresses insight into the substrate. That water cycle is a real asset.</p>
-      <p>But the loop <b>closes</b>. Reconstruction feeds action, action changes the world, the world feeds the stream, and the self re-gates the next pass. One-way sedimentation becomes a closed circuit in which the self both shapes memory and is shaped by it. That bidirectional coupling, the orange spokes at the center, is the whole thesis, and it is exactly what a pile of rock cannot do.</p>
+      <h3>The engine: a closed cycle</h3>
+      <p>A <b>background consolidation process</b> runs continuously, pulling the stream down, stripping token noise, and compressing insight into the substrate. This is the part that resembles a conventional memory pipeline, and the model keeps it.</p>
+      <p>What makes it a substrate rather than a store is that the loop <b>closes</b>. Reconstruction feeds action, action changes the world, the world feeds the stream, and the self re-gates the next pass. The self both shapes memory and is shaped by it. That bidirectional coupling, drawn as the orange spokes at the center, is the load-bearing claim of the whole model.</p>
     </div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <div class="kicker">Same substrate, better model</div>
-    <h2>Where the living loop beats the bedrock</h2>
+    <div class="kicker">Design commitments</div>
+    <h2>Six properties that make it a substrate, not a store</h2>
     <div class="contrast-wrap">
       <table>
         <thead>
-          <tr><th class="g">Google · geology</th><th class="o">Ours · living loop</th></tr>
+          <tr><th class="o">Commitment</th><th class="g">What it means in the model</th></tr>
         </thead>
         <tbody>
-          <tr><td class="g">One-way sedimentation under gravity</td><td class="o">Closed bidirectional loop</td></tr>
-          <tr><td class="g">Permanent bedrock of hard facts</td><td class="o">Revisable knowledge web that can forget</td></tr>
-          <tr><td class="g">LLM pulls a fixed core sample</td><td class="o">Memory is reconstructed in context</td></tr>
-          <tr><td class="g">Episodes are fossils, unchangeable</td><td class="o">Every retrieval is a re-construction</td></tr>
-          <tr><td class="g">Consolidation is goal-blind noise-stripping</td><td class="o">Encoding is gated by goals and salience</td></tr>
-          <tr><td class="g">Stores a user profile</td><td class="o">Evolves a self-model</td></tr>
-          <tr><td class="g">Fixed strata, one canonical location</td><td class="o">Excitable medium, Levin substrate stays open</td></tr>
+          <tr><td class="o">Closed, not one-way</td><td class="g">Encoding and retrieval are two arcs of a single circuit; the agent's output feeds back into its next input.</td></tr>
+          <tr><td class="o">Revisable, not fixed</td><td class="g">The substrate can be rewritten and can forget. Nothing is permanent, so stale knowledge does not accumulate.</td></tr>
+          <tr><td class="o">Reconstructed, not fetched</td><td class="g">Retrieval regrows a compressed engram in the present context rather than returning a stored record.</td></tr>
+          <tr><td class="o">Gated, not indiscriminate</td><td class="g">Current goals and emotional salience decide what is encoded and what surfaces, in both directions.</td></tr>
+          <tr><td class="o">Self-centered, not user-centered</td><td class="g">The core models who the agent is in the relationship, and that self evolves from experience.</td></tr>
+          <tr><td class="o">Substrate-flexible</td><td class="g">Memory is treated as an excitable medium a pattern persists through, not a fixed location a value is parked in.</td></tr>
         </tbody>
       </table>
     </div>
