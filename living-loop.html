@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Our counter to Google's geological memory model: agent memory drawn as a living loop that reconstructs a self.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%8C%80</text></svg>">
+<style>*{margin:0;padding:0}img{max-width:100%}</style>
+<title>Memory as a Living Loop</title>
+<style>
+  :root {
+    --bg: #E7EBEB; --card: #FBFCFC; --card-2: #F1F4F4;
+    --ink: #17221F; --muted: #566462; --faint: #7C8B88;
+    --line: #D3DBDA; --line-strong: #BFC9C8;
+    --accent: #0E7A70; --accent-2: #14988B; --accent-ghost: rgba(20,152,139,.10);
+    --life: #C6702A; --life-2: #E08A3E; --life-ghost: rgba(198,112,42,.12);
+    --ring: #A9C1BD;
+    --shadow: 0 1px 2px rgba(20,34,31,.05), 0 8px 26px rgba(20,34,31,.07);
+    --serif: ui-serif, "Charter", "Iowan Old Style", "Palatino", Georgia, serif;
+    --sans: ui-sans-serif, -apple-system, "Helvetica Neue", "Segoe UI", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Menlo", "Cascadia Code", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0C1013; --card: #131A1D; --card-2: #0F1518;
+      --ink: #E7EEEC; --muted: #97A6A3; --faint: #6E7D7A;
+      --line: #212B2E; --line-strong: #2C393C;
+      --accent: #2FC6B6; --accent-2: #37D3C2; --accent-ghost: rgba(47,198,182,.09);
+      --life: #E39152; --life-2: #F0A566; --life-ghost: rgba(227,145,82,.13);
+      --ring: #33534E;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 34px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="light"]{--bg:#E7EBEB;--card:#FBFCFC;--card-2:#F1F4F4;--ink:#17221F;--muted:#566462;--faint:#7C8B88;--line:#D3DBDA;--line-strong:#BFC9C8;--accent:#0E7A70;--accent-2:#14988B;--accent-ghost:rgba(20,152,139,.10);--life:#C6702A;--life-2:#E08A3E;--life-ghost:rgba(198,112,42,.12);--ring:#A9C1BD;--shadow:0 1px 2px rgba(20,34,31,.05),0 8px 26px rgba(20,34,31,.07);}
+  :root[data-theme="dark"]{--bg:#0C1013;--card:#131A1D;--card-2:#0F1518;--ink:#E7EEEC;--muted:#97A6A3;--faint:#6E7D7A;--line:#212B2E;--line-strong:#2C393C;--accent:#2FC6B6;--accent-2:#37D3C2;--accent-ghost:rgba(47,198,182,.09);--life:#E39152;--life-2:#F0A566;--life-ghost:rgba(227,145,82,.13);--ring:#33534E;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 34px rgba(0,0,0,.4);}
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.6; font-size: 17px; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--accent); }
+
+  header { padding: 60px 0 26px; }
+  .eyebrow { font-family: var(--mono); font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .eyebrow::before { content: ""; width: 26px; height: 1px; background: var(--accent); }
+  h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(32px, 5.2vw, 52px); line-height: 1.05; letter-spacing: -.01em; margin: 0 0 18px; text-wrap: balance; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede { font-size: clamp(17px,2.2vw,20px); color: var(--muted); max-width: 64ch; margin: 0; }
+  .lede b { color: var(--ink); font-weight: 600; }
+
+  /* stage */
+  .stage { margin: 30px 0 8px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 20px 16px 8px; }
+  .stage svg { width: 100%; height: auto; display: block; }
+  .cap { text-align: center; font-family: var(--mono); font-size: 12px; color: var(--faint); letter-spacing: .03em; padding: 6px 12px 14px; }
+
+  /* read-the-loop chips */
+  .loopread { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 22px 0 4px; }
+  .chip { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 15px; box-shadow: var(--shadow); }
+  .chip .step { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  .chip .txt { font-size: 14px; color: var(--muted); }
+  .chip .txt b { color: var(--ink); font-weight: 600; }
+
+  section { padding: 46px 0 0; }
+  .kicker { font-family: var(--mono); font-size: 12px; letter-spacing: .13em; text-transform: uppercase; color: var(--faint); margin-bottom: 12px; }
+  h2 { font-family: var(--serif); font-weight: 600; font-size: clamp(24px,3.3vw,31px); line-height: 1.12; letter-spacing: -.01em; margin: 0 0 20px; text-wrap: balance; }
+
+  .elements { display: flex; flex-direction: column; gap: 12px; }
+  .el { display: grid; grid-template-columns: 150px 1fr; gap: 4px 22px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; box-shadow: var(--shadow); }
+  .el .name { font-family: var(--serif); font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 9px; }
+  .el .name i { width: 11px; height: 11px; border-radius: 3px; flex: none; }
+  .el .role { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); grid-column: 1; }
+  .el .desc { grid-row: 1 / span 2; grid-column: 2; color: var(--muted); font-size: 15.5px; align-self: center; }
+  .el .desc b { color: var(--ink); font-weight: 600; }
+
+  .engine { margin-top: 14px; background: var(--life-ghost); border: 1px solid color-mix(in srgb, var(--life) 30%, var(--line)); border-radius: 12px; padding: 22px 24px; }
+  .engine h3 { margin: 0 0 8px; font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--ink); }
+  .engine p { margin: 0; color: var(--muted); font-size: 15.5px; max-width: 76ch; }
+  .engine p + p { margin-top: 10px; }
+  .engine b { color: var(--ink); font-weight: 600; }
+
+  .contrast-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 620px; background: var(--card); font-size: 15px; }
+  thead th { text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; padding: 14px 20px; border-bottom: 1px solid var(--line-strong); background: var(--card-2); }
+  thead th.g { color: var(--faint); } thead th.o { color: var(--accent); }
+  tbody td { padding: 14px 20px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.g { color: var(--muted); } td.o { color: var(--ink); font-weight: 500; }
+  td.o::before { content: "→ "; color: var(--accent); font-weight: 700; }
+
+  footer { padding: 40px 0 60px; color: var(--faint); font-size: 13.5px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+  footer b { color: var(--muted); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .flowdash { animation: flow 3.4s linear infinite; }
+    .pulse { animation: pulse 3.2s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+    @keyframes flow { to { stroke-dashoffset: -44; } }
+    @keyframes pulse { 0%,100% { opacity: .5; transform: scale(1); } 50% { opacity: .05; transform: scale(1.5); } }
+  }
+  @media (max-width: 760px) {
+    .loopread { grid-template-columns: 1fr 1fr; }
+    .el { grid-template-columns: 1fr; }
+    .el .desc { grid-row: auto; grid-column: 1; }
+  }
+</style>
+</head>
+<body>
+
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Mental model / our version</div>
+    <h1>Memory as a <em>living loop</em>, not geology</h1>
+    <p class="lede">Google modeled agent memory as sediment settling under gravity into permanent bedrock. That is a picture of <b>storage</b>. Here is the same substrate drawn as what our thesis actually claims it is: a closed loop that keeps reconstructing a self.</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="stage">
+    <svg viewBox="0 0 720 660" role="img" aria-label="A circular loop diagram of an AI memory system. A stream enters at the top, passes clockwise through a working-self gate on the right, consolidates into a revisable substrate at the bottom, is reconstructed through a bowtie on the left, and drives action back to the top. A narrative self sits at the center, connected bidirectionally to the loop.">
+      <defs>
+        <radialGradient id="core" cx="50%" cy="45%" r="60%">
+          <stop offset="0" stop-color="var(--life-2)"/>
+          <stop offset="1" stop-color="var(--life)"/>
+        </radialGradient>
+      </defs>
+
+      <!-- the loop ring -->
+      <circle cx="360" cy="320" r="200" fill="none" stroke="var(--ring)" stroke-width="2.5"/>
+      <circle class="flowdash" cx="360" cy="320" r="200" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 40" opacity="0.9"/>
+
+      <!-- clockwise flow arrowheads on cardinals -->
+      <polygon points="360,114 372,120 360,126" fill="var(--accent)"/>
+      <polygon points="554,320 566,320 560,332" fill="var(--accent)"/>
+      <polygon points="360,514 348,520 360,526" fill="var(--accent)"/>
+      <polygon points="154,320 166,320 160,308" fill="var(--accent)"/>
+
+      <!-- verb labels inside the flow band -->
+      <text x="466" y="216" font-family="var(--mono)" font-size="12.5" letter-spacing="1" fill="var(--muted)" text-anchor="middle">ENCODE</text>
+      <text x="466" y="430" font-family="var(--mono)" font-size="12.5" letter-spacing="1" fill="var(--muted)" text-anchor="middle">CONSOLIDATE</text>
+      <text x="254" y="430" font-family="var(--mono)" font-size="12.5" letter-spacing="1" fill="var(--muted)" text-anchor="middle">RECONSTRUCT</text>
+      <text x="254" y="216" font-family="var(--mono)" font-size="12.5" letter-spacing="1" fill="var(--muted)" text-anchor="middle">ACT</text>
+
+      <!-- TOP: the stream -->
+      <g>
+        <line x1="342" y1="70" x2="342" y2="104" stroke="var(--faint)" stroke-width="2" stroke-dasharray="3 5"/>
+        <line x1="360" y1="60" x2="360" y2="108" stroke="var(--faint)" stroke-width="2" stroke-dasharray="3 5"/>
+        <line x1="378" y1="70" x2="378" y2="104" stroke="var(--faint)" stroke-width="2" stroke-dasharray="3 5"/>
+        <text x="360" y="44" font-family="var(--serif)" font-size="17" font-weight="600" fill="var(--ink)" text-anchor="middle">THE STREAM</text>
+        <text x="360" y="62" font-family="var(--sans)" font-size="12.5" fill="var(--muted)" text-anchor="middle" opacity="0"> </text>
+      </g>
+      <text x="360" y="94" font-family="var(--sans)" font-size="12.5" fill="var(--faint)" text-anchor="middle" opacity="0">x</text>
+
+      <!-- RIGHT: working-self gate -->
+      <g>
+        <rect x="544" y="304" width="32" height="32" rx="5" transform="rotate(45 560 320)" fill="var(--card)" stroke="var(--life)" stroke-width="2.5"/>
+        <line x1="560" y1="309" x2="560" y2="331" stroke="var(--life)" stroke-width="2.5"/>
+        <text x="590" y="313" font-family="var(--serif)" font-size="16.5" font-weight="600" fill="var(--ink)" text-anchor="start">WORKING SELF</text>
+        <text x="590" y="331" font-family="var(--sans)" font-size="12.5" fill="var(--muted)" text-anchor="start">goal + salience gate</text>
+      </g>
+
+      <!-- LEFT: reconstruct bowtie -->
+      <g>
+        <path d="M136,306 L160,320 L136,334 Z" fill="var(--accent)"/>
+        <path d="M184,306 L160,320 L184,334 Z" fill="var(--accent)" opacity="0.55"/>
+        <text x="130" y="313" font-family="var(--serif)" font-size="16.5" font-weight="600" fill="var(--ink)" text-anchor="end">RECONSTRUCT</text>
+        <text x="130" y="331" font-family="var(--sans)" font-size="12.5" fill="var(--muted)" text-anchor="end">regrow, not fetch</text>
+      </g>
+
+      <!-- BOTTOM: revisable substrate (knowledge web) -->
+      <g stroke="var(--accent)" stroke-width="1.5" opacity="0.9">
+        <line x1="322" y1="520" x2="352" y2="512"/>
+        <line x1="352" y1="512" x2="386" y2="522"/>
+        <line x1="386" y1="522" x2="404" y2="508"/>
+        <line x1="352" y1="512" x2="368" y2="530"/>
+        <line x1="322" y1="520" x2="338" y2="534"/>
+      </g>
+      <g fill="var(--accent-2)">
+        <circle cx="322" cy="520" r="4.5"/><circle cx="352" cy="512" r="4.5"/><circle cx="386" cy="522" r="4.5"/>
+        <circle cx="404" cy="508" r="4.5"/><circle cx="368" cy="530" r="4.5"/><circle cx="338" cy="534" r="4.5"/>
+      </g>
+      <text x="360" y="576" font-family="var(--serif)" font-size="16.5" font-weight="600" fill="var(--ink)" text-anchor="middle">REVISABLE SUBSTRATE</text>
+      <text x="360" y="594" font-family="var(--sans)" font-size="12.5" fill="var(--muted)" text-anchor="middle">a knowledge web, not permanent bedrock</text>
+
+      <!-- co-emergence: bidirectional spokes on vertical axis -->
+      <g stroke="var(--life)" stroke-width="1.6" stroke-dasharray="2 4" opacity="0.85">
+        <line x1="360" y1="270" x2="360" y2="176"/>
+        <line x1="360" y1="370" x2="360" y2="466"/>
+      </g>
+      <polygon points="360,168 356,178 364,178" fill="var(--life)"/>
+      <polygon points="360,178 356,168 364,168" fill="var(--life)" opacity="0"/>
+      <polygon points="360,474 356,464 364,464" fill="var(--life)"/>
+      <polygon points="356,270 364,270 360,262" fill="var(--life)"/>
+      <polygon points="356,370 364,370 360,378" fill="var(--life)"/>
+
+      <!-- CENTER: narrative self -->
+      <circle class="pulse" cx="360" cy="320" r="52" fill="none" stroke="var(--life)" stroke-width="2"/>
+      <circle cx="360" cy="320" r="50" fill="url(#core)"/>
+      <text x="360" y="315" font-family="var(--mono)" font-size="11.5" letter-spacing="1.5" fill="#fff" text-anchor="middle" font-weight="600">NARRATIVE</text>
+      <text x="360" y="333" font-family="var(--mono)" font-size="11.5" letter-spacing="1.5" fill="#fff" text-anchor="middle" font-weight="600">SELF</text>
+    </svg>
+    <div class="cap">one continuous cycle · the self sits at the center and is remade by every pass</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="loopread">
+    <div class="chip"><div class="step">1 · encode</div><div class="txt">The stream is <b>gated by goals and salience</b> before anything is stored. Nothing settles blind.</div></div>
+    <div class="chip"><div class="step">2 · consolidate</div><div class="txt">A background process compresses episodes into a <b>revisable web</b>. It can be rewritten and forgotten.</div></div>
+    <div class="chip"><div class="step">3 · reconstruct</div><div class="txt">On the way out, memory is a <b>seed regrown in context</b> through the bowtie, never fetched raw.</div></div>
+    <div class="chip"><div class="step">4 · act &amp; return</div><div class="txt">Action changes the world, the world feeds the stream, and the <b>self re-gates the next pass</b>.</div></div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="kicker">The elements</div>
+    <h2>Four elements and one transform, arranged as a loop</h2>
+    <div class="elements">
+      <div class="el">
+        <div class="name"><i style="background:var(--faint)"></i>The Stream</div>
+        <div class="role">world in</div>
+        <div class="desc">Raw prompts, tool outputs, events. Transient and unstructured. <b>The one place we fully agree with Google.</b></div>
+      </div>
+      <div class="el">
+        <div class="name"><i style="background:var(--life)"></i>Working-Self Gate</div>
+        <div class="role">goal + salience</div>
+        <div class="desc">A filter every item crosses in <b>both directions</b>: what gets encoded, and what is allowed to surface, is decided by current goals and emotional weight. Geology has no gate; sediment settles goal-blind.</div>
+      </div>
+      <div class="el">
+        <div class="name"><i style="background:var(--accent)"></i>Revisable Substrate</div>
+        <div class="role">knowledge web</div>
+        <div class="desc">Consolidated, interconnected, and <b>rewritable</b>. Facts get superseded, the self can forget. Google's "permanent bedrock" bakes in stale knowledge and, by our own conservatism principle, will distort new input to protect itself.</div>
+      </div>
+      <div class="el">
+        <div class="name"><i style="background:var(--accent-2)"></i>Reconstruct</div>
+        <div class="role">the bowtie</div>
+        <div class="desc">The transform on the retrieval arc. A compressed engram is <b>regrown for the present moment</b>, not returned as a raw core sample. Retrieval is generation.</div>
+      </div>
+      <div class="el">
+        <div class="name"><i style="background:var(--life-2)"></i>Narrative Self</div>
+        <div class="role">the core</div>
+        <div class="desc">Everything circulates around an <b>evolving self-model</b>: not "what I know about the user" but "who I am in this relationship." It updates from every act. Google stores a user profile and has no self at all.</div>
+      </div>
+    </div>
+
+    <div class="engine">
+      <h3>The engine: a real cycle, not gravity</h3>
+      <p>We keep the one thing Google got genuinely right. A <b>background consolidation process</b> still pulls the stream down, strips token noise, and compresses insight into the substrate. That water cycle is a real asset.</p>
+      <p>But the loop <b>closes</b>. Reconstruction feeds action, action changes the world, the world feeds the stream, and the self re-gates the next pass. One-way sedimentation becomes a closed circuit in which the self both shapes memory and is shaped by it. That bidirectional coupling, the orange spokes at the center, is the whole thesis, and it is exactly what a pile of rock cannot do.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="kicker">Same substrate, better model</div>
+    <h2>Where the living loop beats the bedrock</h2>
+    <div class="contrast-wrap">
+      <table>
+        <thead>
+          <tr><th class="g">Google · geology</th><th class="o">Ours · living loop</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="g">One-way sedimentation under gravity</td><td class="o">Closed bidirectional loop</td></tr>
+          <tr><td class="g">Permanent bedrock of hard facts</td><td class="o">Revisable knowledge web that can forget</td></tr>
+          <tr><td class="g">LLM pulls a fixed core sample</td><td class="o">Memory is reconstructed in context</td></tr>
+          <tr><td class="g">Episodes are fossils, unchangeable</td><td class="o">Every retrieval is a re-construction</td></tr>
+          <tr><td class="g">Consolidation is goal-blind noise-stripping</td><td class="o">Encoding is gated by goals and salience</td></tr>
+          <tr><td class="g">Stores a user profile</td><td class="o">Evolves a self-model</td></tr>
+          <tr><td class="g">Fixed strata, one canonical location</td><td class="o">Excitable medium, Levin substrate stays open</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <b>Companion to</b> the <a href="./">five-layer architecture</a> · <span>Conway, Damasio, Bruner, Klein &amp; Nichols via Youssef, and Levin.</span>
+  </div>
+</footer>
+
+</body>
+</html>

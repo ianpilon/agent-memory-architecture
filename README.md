@@ -4,6 +4,8 @@ A five-layer memory architecture for AI agents, derived from the memory-as-subst
 (Conway, Damasio, Bruner, Klein & Nichols via Youssef, and Levin), with a build-feasibility
 verdict for each layer.
 
-Live page: https://ianpilon.github.io/agent-memory-architecture/
+Pages:
+- Five-layer architecture: https://ianpilon.github.io/agent-memory-architecture/
+- Living-loop mental model: https://ianpilon.github.io/agent-memory-architecture/living-loop.html
 
 Source thesis: https://github.com/ianpilon/memory-podcast-substrate-site
