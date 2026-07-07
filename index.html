@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A five-layer AI agent memory architecture derived from the memory-as-substrate thesis, with a build-feasibility verdict for each layer.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%A7%A0</text></svg>">
+<style>*{margin:0;padding:0}img{max-width:100%}</style>
+<title>A Substrate-Aware Memory Architecture for AI Agents</title>
+<style>
+  :root {
+    --bg: #E7EBEB;
+    --card: #FBFCFC;
+    --card-2: #F1F4F4;
+    --ink: #17221F;
+    --muted: #566462;
+    --faint: #7C8B88;
+    --line: #D3DBDA;
+    --line-strong: #BFC9C8;
+    --accent: #0E7A70;
+    --accent-2: #14988B;
+    --accent-ghost: rgba(20, 152, 139, 0.10);
+    --good: #2E8B4E;
+    --warn: #B07A12;
+    --frontier: #C25E2A;
+    --blocked: #B23F3F;
+    --good-bg: rgba(46, 139, 78, 0.12);
+    --warn-bg: rgba(176, 122, 18, 0.13);
+    --frontier-bg: rgba(194, 94, 42, 0.13);
+    --blocked-bg: rgba(178, 63, 63, 0.12);
+    --shadow: 0 1px 2px rgba(20,34,31,.05), 0 6px 22px rgba(20,34,31,.06);
+
+    --serif: ui-serif, "Charter", "Iowan Old Style", "Palatino", Georgia, serif;
+    --sans: ui-sans-serif, -apple-system, "Helvetica Neue", "Segoe UI", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Menlo", "Cascadia Code", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0C1013;
+      --card: #131A1D;
+      --card-2: #0F1518;
+      --ink: #E7EEEC;
+      --muted: #97A6A3;
+      --faint: #6E7D7A;
+      --line: #212B2E;
+      --line-strong: #2C393C;
+      --accent: #2FC6B6;
+      --accent-2: #37D3C2;
+      --accent-ghost: rgba(47, 198, 182, 0.09);
+      --good: #4FBE6E;
+      --warn: #DCA93B;
+      --frontier: #E3834A;
+      --blocked: #E25C5C;
+      --good-bg: rgba(79, 190, 110, 0.13);
+      --warn-bg: rgba(220, 169, 59, 0.13);
+      --frontier-bg: rgba(227, 131, 74, 0.13);
+      --blocked-bg: rgba(226, 92, 92, 0.13);
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #E7EBEB; --card: #FBFCFC; --card-2: #F1F4F4; --ink: #17221F; --muted: #566462;
+    --faint: #7C8B88; --line: #D3DBDA; --line-strong: #BFC9C8; --accent: #0E7A70; --accent-2: #14988B;
+    --accent-ghost: rgba(20,152,139,.10); --good: #2E8B4E; --warn: #B07A12; --frontier: #C25E2A; --blocked: #B23F3F;
+    --good-bg: rgba(46,139,78,.12); --warn-bg: rgba(176,122,18,.13); --frontier-bg: rgba(194,94,42,.13); --blocked-bg: rgba(178,63,63,.12);
+    --shadow: 0 1px 2px rgba(20,34,31,.05), 0 6px 22px rgba(20,34,31,.06);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0C1013; --card: #131A1D; --card-2: #0F1518; --ink: #E7EEEC; --muted: #97A6A3;
+    --faint: #6E7D7A; --line: #212B2E; --line-strong: #2C393C; --accent: #2FC6B6; --accent-2: #37D3C2;
+    --accent-ghost: rgba(47,198,182,.09); --good: #4FBE6E; --warn: #DCA93B; --frontier: #E3834A; --blocked: #E25C5C;
+    --good-bg: rgba(79,190,110,.13); --warn-bg: rgba(220,169,59,.13); --frontier-bg: rgba(227,131,74,.13); --blocked-bg: rgba(226,92,92,.13);
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 30px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--sans); line-height: 1.6;
+    -webkit-font-smoothing: antialiased; font-size: 17px;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ---------- Hero ---------- */
+  header {
+    padding: 68px 0 40px;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow {
+    font-family: var(--mono); font-size: 12.5px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--accent);
+    display: flex; align-items: center; gap: 10px; margin-bottom: 22px;
+  }
+  .eyebrow::before {
+    content: ""; width: 26px; height: 1px; background: var(--accent); display: inline-block;
+  }
+  h1 {
+    font-family: var(--serif); font-weight: 600; font-size: clamp(34px, 5.4vw, 56px);
+    line-height: 1.04; letter-spacing: -.01em; margin: 0 0 20px; text-wrap: balance;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede {
+    font-size: clamp(18px, 2.3vw, 21px); color: var(--muted); max-width: 62ch;
+    margin: 0; line-height: 1.5;
+  }
+  .thesis {
+    margin-top: 30px; padding: 18px 22px; background: var(--accent-ghost);
+    border-left: 2px solid var(--accent); border-radius: 0 8px 8px 0;
+    font-family: var(--serif); font-size: 18px; font-style: italic; color: var(--ink);
+    max-width: 70ch;
+  }
+  .thesis b { font-style: normal; font-weight: 600; }
+
+  /* ---------- Section scaffolding ---------- */
+  section { padding: 56px 0; border-bottom: 1px solid var(--line); }
+  .section-head { margin-bottom: 34px; max-width: 66ch; }
+  .kicker {
+    font-family: var(--mono); font-size: 12px; letter-spacing: .13em; text-transform: uppercase;
+    color: var(--faint); margin-bottom: 12px;
+  }
+  h2 {
+    font-family: var(--serif); font-weight: 600; font-size: clamp(25px, 3.4vw, 33px);
+    line-height: 1.12; letter-spacing: -.01em; margin: 0 0 14px; text-wrap: balance;
+  }
+  .section-head p { margin: 0; color: var(--muted); font-size: 17px; }
+
+  /* ---------- Layer stack ---------- */
+  .stack { display: flex; flex-direction: column; gap: 14px; }
+  .layer {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    box-shadow: var(--shadow); overflow: hidden;
+    display: grid; grid-template-columns: 66px 1fr; align-items: stretch;
+  }
+  .layer-rail {
+    background: var(--card-2); border-right: 1px solid var(--line);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 6px; padding: 18px 0;
+  }
+  .layer-num {
+    font-family: var(--mono); font-size: 20px; font-weight: 600; color: var(--accent);
+    line-height: 1;
+  }
+  .layer-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .layer-body { padding: 20px 24px 22px; }
+  .layer-title-row {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+    flex-wrap: wrap; margin-bottom: 6px;
+  }
+  .layer-title { font-family: var(--serif); font-size: 21px; font-weight: 600; margin: 0; }
+  .layer-source {
+    font-family: var(--mono); font-size: 12px; color: var(--faint); letter-spacing: .02em;
+  }
+  .layer-body > p { margin: 8px 0 0; color: var(--muted); font-size: 15.5px; }
+  .layer-eng {
+    margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--line-strong);
+    display: grid; grid-template-columns: 92px 1fr; gap: 4px 14px; font-size: 15px;
+  }
+  .layer-eng dt {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .09em; text-transform: uppercase;
+    color: var(--faint); padding-top: 3px;
+  }
+  .layer-eng dd { margin: 0; color: var(--ink); }
+  .layer-eng dd code {
+    font-family: var(--mono); font-size: 13px; background: var(--accent-ghost);
+    color: var(--accent); padding: 1px 6px; border-radius: 5px;
+  }
+
+  /* status pills */
+  .pill {
+    display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono);
+    font-size: 11.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+    padding: 4px 10px 4px 8px; border-radius: 100px; white-space: nowrap; border: 1px solid transparent;
+  }
+  .pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; }
+  .pill.good { color: var(--good); background: var(--good-bg); border-color: color-mix(in srgb, var(--good) 26%, transparent); }
+  .pill.good::before { background: var(--good); }
+  .pill.warn { color: var(--warn); background: var(--warn-bg); border-color: color-mix(in srgb, var(--warn) 26%, transparent); }
+  .pill.warn::before { background: var(--warn); }
+  .pill.frontier { color: var(--frontier); background: var(--frontier-bg); border-color: color-mix(in srgb, var(--frontier) 26%, transparent); }
+  .pill.frontier::before { background: var(--frontier); }
+  .pill.blocked { color: var(--blocked); background: var(--blocked-bg); border-color: color-mix(in srgb, var(--blocked) 26%, transparent); }
+  .pill.blocked::before { background: var(--blocked); }
+
+  .dot-good { background: var(--good); }
+  .dot-warn { background: var(--warn); }
+  .dot-frontier { background: var(--frontier); }
+  .dot-blocked { background: var(--blocked); }
+
+  /* ---------- Flow (write / read) ---------- */
+  .flows { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .flow {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 22px 22px 24px; box-shadow: var(--shadow);
+  }
+  .flow h3 {
+    font-family: var(--mono); font-size: 12.5px; letter-spacing: .11em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 4px;
+  }
+  .flow .flow-sub { font-size: 14px; color: var(--faint); margin: 0 0 18px; }
+  .steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
+  .steps li {
+    position: relative; padding: 0 0 18px 26px; font-size: 15px; color: var(--ink);
+  }
+  .steps li:last-child { padding-bottom: 0; }
+  .steps li::before {
+    content: ""; position: absolute; left: 5px; top: 6px; width: 8px; height: 8px;
+    border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--accent-ghost);
+  }
+  .steps li::after {
+    content: ""; position: absolute; left: 8.5px; top: 15px; bottom: 3px; width: 1px; background: var(--line-strong);
+  }
+  .steps li:last-child::after { display: none; }
+  .steps b { font-weight: 600; }
+  .steps .lref { font-family: var(--mono); font-size: 11px; color: var(--faint); }
+
+  /* ---------- Bowtie diagram ---------- */
+  .bowtie-note { margin-top: 18px; font-size: 14.5px; color: var(--muted); max-width: 64ch; }
+  figure.bowtie { margin: 8px 0 0; }
+  figure.bowtie svg { width: 100%; height: auto; display: block; }
+  figcaption { font-family: var(--mono); font-size: 12px; color: var(--faint); margin-top: 10px; text-align: center; letter-spacing: .03em; }
+
+  /* ---------- Verdict ledger ---------- */
+  .ledger-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 720px; background: var(--card); font-size: 14.5px; }
+  thead th {
+    text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--faint); font-weight: 600; padding: 14px 18px; border-bottom: 1px solid var(--line-strong);
+    background: var(--card-2);
+  }
+  tbody td { padding: 15px 18px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  td .cap { font-weight: 600; color: var(--ink); display: block; margin-bottom: 3px; }
+  td .cap-src { font-family: var(--mono); font-size: 11.5px; color: var(--faint); }
+  td.reason { color: var(--muted); }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 20px; }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--muted); }
+  .legend i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+
+  /* ---------- Bottom line ---------- */
+  .bottom { background: transparent; }
+  .verdict-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
+  .vcard {
+    border: 1px solid var(--line); border-radius: 12px; padding: 22px; background: var(--card); box-shadow: var(--shadow);
+  }
+  .vcard h3 { margin: 0 0 10px; font-family: var(--serif); font-size: 19px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+  .vcard h3 i { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  .vcard p { margin: 0; font-size: 15px; color: var(--muted); }
+  .vcard p + p { margin-top: 10px; }
+  .vcard b { color: var(--ink); font-weight: 600; }
+
+  .callout {
+    margin-top: 26px; padding: 24px 26px; border: 1px solid color-mix(in srgb, var(--blocked) 30%, var(--line));
+    background: var(--blocked-bg); border-radius: 12px;
+  }
+  .callout h3 { margin: 0 0 8px; font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--ink); }
+  .callout p { margin: 0; color: var(--muted); font-size: 15.5px; max-width: 74ch; }
+  .callout p + p { margin-top: 10px; }
+  .callout .q { color: var(--blocked); font-weight: 600; }
+
+  footer { padding: 40px 0 60px; color: var(--faint); font-size: 13.5px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: baseline; }
+  footer b { color: var(--muted); font-weight: 600; }
+
+  @media (max-width: 720px) {
+    .flows, .verdict-cards { grid-template-columns: 1fr; }
+    .layer { grid-template-columns: 52px 1fr; }
+    .layer-eng { grid-template-columns: 1fr; gap: 2px; }
+    .layer-eng dt { padding-top: 8px; }
+  }
+</style>
+</head>
+<body>
+
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Reference architecture</div>
+    <h1>A memory architecture where the agent <em>persists</em>, not just retrieves</h1>
+    <p class="lede">Five engineering layers derived from Conway's psychology, Damasio's neuroscience, and Levin's biology, mapped to what you can ship today and what is still an open research problem.</p>
+    <div class="thesis">Memory is not storage. It is the <b>construction process by which a self maintains identity across change.</b> Treating it as a database is the category error behind why agent memory falls apart past a few thousand documents.</div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">The stack / five layers</div>
+      <h2>The layers build on each other, bottom to top</h2>
+      <p>Layers 1 to 4 are Youssef's five principles restated as buildable components. Layer 5 is the Levin substrate claim that his framework does not reach. Each carries a source lineage and a build verdict.</p>
+    </div>
+
+    <div class="stack">
+
+      <!-- L1 -->
+      <div class="layer">
+        <div class="layer-rail"><span class="layer-num">1</span><span class="layer-dot dot-good"></span></div>
+        <div class="layer-body">
+          <div class="layer-title-row">
+            <h3 class="layer-title">Hierarchy and goal-filtering</h3>
+            <span class="layer-source">Conway · working-self + autobiographical KB</span>
+          </div>
+          <p>Do not flat-search every fragment at equal depth. Store memory as a partonomy (epochs, then recurring themes, then specific episodes) and let a live model of the agent's current goal gate which branch is even opened. The working self decides what is worth encoding and what may enter consciousness.</p>
+          <dl class="layer-eng">
+            <dt>Build as</dt>
+            <dd>Nested temporal store (<code>epoch → theme → episode</code>) plus a goal-conditioned retrieval planner that rewrites the query before it hits the index. Temporal knowledge graphs (Zep / Graphiti) already approximate this.</dd>
+            <dt>Verdict</dt>
+            <dd><span class="pill good">Shippable today</span></dd>
+          </dl>
+        </div>
+      </div>
+
+      <!-- L2 -->
+      <div class="layer">
+        <div class="layer-rail"><span class="layer-num">2</span><span class="layer-dot dot-warn"></span></div>
+        <div class="layer-body">
+          <div class="layer-title-row">
+            <h3 class="layer-title">Active reinterpretation on retrieval</h3>
+            <span class="layer-source">Levin · bowtie architecture</span>
+          </div>
+          <p>A retrieved memory is a compressed engram with no metadata attached. It cannot be handed back raw. The read side must creatively re-inflate it in the current context, with allegiance to who is asking now, not to who wrote it. Retrieval is generation, not a nearest-neighbor lookup.</p>
+          <dl class="layer-eng">
+            <dt>Build as</dt>
+            <dd>Replace "return top-k chunks" with "retrieve, then have the model synthesize them against the present task." The mechanism exists (query-focused synthesis). Doing it <em>well</em> is the hard part: the same move that produces useful reinterpretation also produces confabulation and drift.</dd>
+            <dt>Verdict</dt>
+            <dd><span class="pill warn">Buildable, hard to do well</span></dd>
+          </dl>
+        </div>
+      </div>
+
+      <!-- L3 -->
+      <div class="layer">
+        <div class="layer-rail"><span class="layer-num">3</span><span class="layer-dot dot-warn"></span></div>
+        <div class="layer-body">
+          <div class="layer-title-row">
+            <h3 class="layer-title">Salience and emotional weighting</h3>
+            <span class="layer-source">Damasio · somatic markers + Conway conservatism</span>
+          </div>
+          <p>Emotionally significant experience encodes deeper and returns faster. A frustrated exchange should not sit at the same weight as a routine query. Salience should bias three things: what gets stored at all, what surfaces first, and how the agent reads its own current state.</p>
+          <dl class="layer-eng">
+            <dt>Build as</dt>
+            <dd>Valence-arousal scores as <code>node metadata</code> (classifiers are mature, this part is easy) wired into encoding depth, retrieval ranking, and a running affect signal. The open work is using the score to gate <em>encoding</em> and <em>behavior</em>, not just to boost ranking.</dd>
+            <dt>Verdict</dt>
+            <dd><span class="pill warn">Scoring trivial, wiring it in is not</span></dd>
+          </dl>
+        </div>
+      </div>
+
+      <!-- L4 -->
+      <div class="layer">
+        <div class="layer-rail"><span class="layer-num">4</span><span class="layer-dot dot-frontier"></span></div>
+        <div class="layer-body">
+          <div class="layer-title-row">
+            <h3 class="layer-title">Narrative layer and co-emergent self-model</h3>
+            <span class="layer-source">Bruner + Klein/Nichols · narrative-coherence + co-emergent self</span>
+          </div>
+          <p>Episodes become a self only when a story binds them. The agent should hold "what story am I in with this user," and that self-model should update from experience so the agent is genuinely different at month twelve than at month one. This is where identity, not just recall, lives.</p>
+          <dl class="layer-eng">
+            <dt>Build as</dt>
+            <dd>A periodic reflection pass that rewrites an explicit self-state object from accumulated memory (the pattern in Stanford's generative agents). Prototypes exist. What is unsolved: keeping the narrative coherent and load-bearing over long horizons without drift, sycophancy, or personality collapse.</dd>
+            <dt>Verdict</dt>
+            <dd><span class="pill frontier">Research frontier</span></dd>
+          </dl>
+        </div>
+      </div>
+
+      <!-- L5 -->
+      <div class="layer">
+        <div class="layer-rail"><span class="layer-num">5</span><span class="layer-dot dot-blocked"></span></div>
+        <div class="layer-body">
+          <div class="layer-title-row">
+            <h3 class="layer-title">Substrate flexibility</h3>
+            <span class="layer-source">Levin · polycomputing + no-single-substrate</span>
+          </div>
+          <p>The Levin layer, which Youssef's five principles do not touch. Memory as an active, agential pattern that can be re-read from a new perspective without being rewritten, distributed across a reservoir rather than parked in one store. The engram partly shapes the agent that holds it.</p>
+          <dl class="layer-eng">
+            <dt>Build as</dt>
+            <dd>No clean pattern on today's stack. A vector index gives you the passive <em>read</em> side of polycomputing (one stored vector answers many queries). The active <em>write</em> side, memory that directs other subsystems, does not exist. Candidate substrates (reservoir computing, neuromorphic) are not integrated with agent frameworks.</dd>
+            <dt>Verdict</dt>
+            <dd><span class="pill blocked">Blocked on substrate</span></dd>
+          </dl>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Data flow</div>
+      <h2>How a memory moves through the stack</h2>
+      <p>The write path and read path reuse the same layers in different orders. The read path is the one that breaks the database metaphor: nothing is returned raw.</p>
+    </div>
+
+    <div class="flows">
+      <div class="flow">
+        <h3>Write path</h3>
+        <p class="flow-sub">Encoding an interaction</p>
+        <ul class="steps">
+          <li><b>Score salience</b> of the incoming exchange. <span class="lref">L3</span></li>
+          <li><b>Working-self gate</b> decides whether and how deeply to encode it, given current goals. <span class="lref">L1</span></li>
+          <li><b>Place in the partonomy</b>: attach to the right epoch, theme, and episode. <span class="lref">L1</span></li>
+          <li><b>Reflection pass</b> periodically rewrites the self-model from what has accumulated. <span class="lref">L4</span></li>
+        </ul>
+      </div>
+      <div class="flow">
+        <h3>Read path</h3>
+        <p class="flow-sub">Answering in context</p>
+        <ul class="steps">
+          <li><b>Goal builds the query</b>: retrieval is conditioned on the present task, not raw similarity. <span class="lref">L1 / L2</span></li>
+          <li><b>Descend the hierarchy</b> instead of flat-searching everything. <span class="lref">L1</span></li>
+          <li><b>Re-inflate, do not return</b>: synthesize the engram against the current moment. <span class="lref">L2</span></li>
+          <li><b>Condition on self-model and salience</b>, then let the output update the self. <span class="lref">L3 / L4 / L5</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <figure class="bowtie">
+      <svg viewBox="0 0 900 220" role="img" aria-label="Bowtie diagram: rich input compresses to a narrow engram, then re-inflates creatively">
+        <defs>
+          <linearGradient id="gL" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="var(--accent-2)" stop-opacity="0.85"/>
+            <stop offset="1" stop-color="var(--accent-2)" stop-opacity="0.18"/>
+          </linearGradient>
+          <linearGradient id="gR" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="var(--accent-2)" stop-opacity="0.18"/>
+            <stop offset="1" stop-color="var(--accent-2)" stop-opacity="0.85"/>
+          </linearGradient>
+        </defs>
+        <!-- left cone -->
+        <path d="M20,20 L440,95 L440,125 L20,200 Z" fill="url(#gL)"/>
+        <!-- right cone -->
+        <path d="M880,20 L460,95 L460,125 L880,200 Z" fill="url(#gR)"/>
+        <!-- waist -->
+        <rect x="440" y="88" width="20" height="44" rx="4" fill="var(--accent)"/>
+        <text x="20" y="14" font-family="ui-monospace,monospace" font-size="13" fill="var(--muted)">rich interaction</text>
+        <text x="450" y="160" font-family="ui-monospace,monospace" font-size="13" fill="var(--accent)" text-anchor="middle">engram</text>
+        <text x="880" y="14" font-family="ui-monospace,monospace" font-size="13" fill="var(--muted)" text-anchor="end">re-inflated in context</text>
+        <text x="230" y="118" font-family="ui-sans-serif,sans-serif" font-size="14" fill="var(--ink)" text-anchor="middle">compress · lose metadata</text>
+        <text x="670" y="118" font-family="ui-sans-serif,sans-serif" font-size="14" fill="var(--ink)" text-anchor="middle">creatively reconstruct</text>
+      </svg>
+      <figcaption>Layer 2 in one shape: the bottleneck strips the metadata, so the far side must interpret, not look up.</figcaption>
+    </figure>
+    <p class="bowtie-note">This is why a plain vector store fails as identity memory: it treats the narrow waist as an address to fetch from, when the architecture says the waist is a seed that has to be regrown for whoever is asking now.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">The verdict / what is possible today</div>
+      <h2>What you can ship, what needs research, what the substrate blocks</h2>
+      <p>The honest reading of the five layers against 2026 tooling. The line between buildable and blocked runs right through Youssef's fifth principle and into Levin's territory.</p>
+    </div>
+
+    <div class="ledger-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th>Status</th>
+            <th>Why it lands there</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="cap">Hierarchical temporal store</span><span class="cap-src">L1 · Conway</span></td>
+            <td><span class="pill good">Shippable</span></td>
+            <td class="reason">Nested structures and temporal knowledge graphs are mature. Products already narrow by period, then theme, then episode.</td>
+          </tr>
+          <tr>
+            <td><span class="cap">Goal-conditioned retrieval gate</span><span class="cap-src">L1 / L2 · Conway</span></td>
+            <td><span class="pill good">Shippable</span></td>
+            <td class="reason">Agentic query rewriting and planner-mediated retrieval exist. The working-self gate is a task-context filter over the index.</td>
+          </tr>
+          <tr>
+            <td><span class="cap">Salience scoring of memories</span><span class="cap-src">L3 · Damasio</span></td>
+            <td><span class="pill good">Shippable</span></td>
+            <td class="reason">Sentiment and valence-arousal classifiers are commodity. Tagging nodes with an emotional weight is straightforward.</td>
+          </tr>
+          <tr>
+            <td><span class="cap">Reinterpret on retrieval, not fetch</span><span class="cap-src">L2 · Levin bowtie</span></td>
+            <td><span class="pill warn">Buildable, tuning-limited</span></td>
+            <td class="reason">Synthesis over retrieved context is easy to wire. Keeping reinterpretation useful instead of hallucinated is an unsolved control problem.</td>
+          </tr>
+          <tr>
+            <td><span class="cap">Salience that gates encoding + behavior</span><span class="cap-src">L3 · Damasio + Conway</span></td>
+            <td><span class="pill warn">Buildable, under-explored</span></td>
+            <td class="reason">Using the score to decide what is stored and how the agent acts (not just ranking) has few worked examples.</td>
+          </tr>
+          <tr>
+            <td><span class="cap">Narrative self-model that evolves</span><span class="cap-src">L4 · Bruner + Klein/Nichols</span></td>
+            <td><span class="pill frontier">Research frontier</span></td>
+            <td class="reason">Reflection prototypes work in demos. No architecture reliably keeps a self-model coherent over long horizons without drift.</td>
+          </tr>
+          <tr>
+            <td><span class="cap">Genuine co-emergent agent-self</span><span class="cap-src">L4 · Klein/Nichols</span></td>
+            <td><span class="pill frontier">Research frontier</span></td>
+            <td class="reason">Prompt-as-self is too thin, weights-as-self drifts and costs, external self-state needs a reflection protocol no shipped agent has. Labs avoid it for sycophancy and collapse risk.</td>
+          </tr>
+          <tr>
+            <td><span class="cap">Agential, substrate-flexible memory</span><span class="cap-src">L5 · Levin polycomputing</span></td>
+            <td><span class="pill blocked">Blocked on substrate</span></td>
+            <td class="reason">The passive read side is approximable; the active write side (memory that shapes its host) has no implementation on LLM + vector DB. This is the wiki's genuine open question.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="legend">
+      <span><i class="dot-good"></i> Shippable now</span>
+      <span><i class="dot-warn"></i> Buildable, quality is the open work</span>
+      <span><i class="dot-frontier"></i> Research frontier, prototypes only</span>
+      <span><i class="dot-blocked"></i> Blocked on current substrates</span>
+    </div>
+  </div>
+</section>
+
+<section class="bottom">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Bottom line</div>
+      <h2>Four fifths of this is an engineering project. The last fifth is a research bet.</h2>
+    </div>
+
+    <div class="verdict-cards">
+      <div class="vcard">
+        <h3><i class="dot-good"></i> Build this now</h3>
+        <p><b>Layers 1 through 3 are a real product.</b> A hierarchical, goal-gated, salience-weighted memory that reconstructs on retrieval instead of fetching is assemblable from mature parts today. It would already beat flat vector recall on the failure mode Youssef names: coherence past ten thousand documents.</p>
+        <p>The catch on Layer 2 and the harder half of Layer 3 is quality, not feasibility. You can wire it; making reinterpretation trustworthy is the tuning problem.</p>
+      </div>
+      <div class="vcard">
+        <h3><i class="dot-frontier"></i> Treat this as research</h3>
+        <p><b>Layer 4 is where identity actually lives, and no one has shipped it well.</b> Reflection loops give you a narrative layer in prototype form, but a self-model that stays coherent and grows over a year without drifting into sycophancy is an open problem the frontier labs have deliberately not solved in production.</p>
+        <p>Do not block the first three layers on it. Ship them, instrument drift, then reach for the narrative layer.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h3>The Levin layer is the honest unknown</h3>
+      <p>Layer 5 is not "hard to build," it is "unclear the material can hold it." Levin's claim is that memory is an active, agential, substrate-independent pattern. On an LLM plus a vector database, memory is passive data you look up. You can imitate the read side of polycomputing, but the write side (an engram that reshapes the agent that carries it) has no home on this substrate.</p>
+      <p class="q">The open question the wiki flags directly: can any engineered substrate support the Levin layer at all, or does the LLM-plus-index floor cap how much identity-coherence you can ever reach? Reservoir computing and neuromorphic hardware are the named candidates, and neither is wired into an agent stack yet.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <b>Source:</b> memory-podcast-substrate-site
+    <span>·</span>
+    <span>Synthesizing Conway (2005), Damasio, Bruner, Klein &amp; Nichols via Youssef (2026), and Levin (2024).</span>
+    <span>·</span>
+    <span>Verdicts are a read of 2026 tooling, not a spec.</span>
+  </div>
+</footer>
+
+</body>
+</html>
