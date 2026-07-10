@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="A five-layer AI agent memory architecture derived from the memory-as-substrate thesis, with a build-feasibility verdict for each layer.">
+<meta name="description" content="A five-layer AI agent memory architecture derived from the memory-as-navigation thesis, with a build-feasibility verdict for each layer.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%A7%A0</text></svg>">
 <style>*{margin:0;padding:0}img{max-width:100%}</style>
 <title>A Substrate-Aware Memory Architecture for AI Agents</title>
@@ -305,7 +305,7 @@
           <p>Do not flat-search every fragment at equal depth. Store memory as a partonomy (epochs, then recurring themes, then specific episodes) and let a live model of the agent's current goal gate which branch is even opened. The working self decides what is worth encoding and what may enter consciousness.</p>
           <dl class="layer-eng">
             <dt>Build as</dt>
-            <dd>Nested temporal store (<code>epoch → theme → episode</code>) plus a goal-conditioned retrieval planner that rewrites the query before it hits the index. Temporal knowledge graphs (Zep / Graphiti) already approximate this.</dd>
+            <dd>Nested temporal store (<code>epoch → theme → episode</code>) plus a goal-conditioned retrieval planner that rewrites the query before it hits the index. Temporal knowledge graphs (Zep / Graphiti) already approximate this. NapMem (Xu et al., 2026) is the cleanest worked example: its four-level pyramid (raw conversations → records → topic tracks → profile) independently re-derives Conway's autobiographical hierarchy from engineering pressure, and ships competitively.</dd>
             <dt>Verdict</dt>
             <dd><span class="pill good">Shippable today</span></dd>
           </dl>
@@ -323,9 +323,9 @@
           <p>A retrieved memory is a compressed engram with no metadata attached. It cannot be handed back raw. The read side must creatively re-inflate it in the current context, with allegiance to who is asking now, not to who wrote it. Retrieval is generation, not a nearest-neighbor lookup.</p>
           <dl class="layer-eng">
             <dt>Build as</dt>
-            <dd>Replace "return top-k chunks" with "retrieve, then have the model synthesize them against the present task." The mechanism exists (query-focused synthesis). Doing it <em>well</em> is the hard part: the same move that produces useful reinterpretation also produces confabulation and drift.</dd>
+            <dd>Replace "return top-k chunks" with "retrieve, then have the model synthesize them against the present task." The mechanism exists (query-focused synthesis), and NapMem now gives it a measured training recipe: expose memory as tools, train the agent with GRPO over memory-tool trajectories, and its navigation ablation shows active use beats passive retrieval with the same sources. Doing it <em>trustworthily over long horizons</em> is still the hard part: the same move that produces useful reinterpretation also produces confabulation and drift.</dd>
             <dt>Verdict</dt>
-            <dd><span class="pill warn">Buildable, hard to do well</span></dd>
+            <dd><span class="pill warn">Buildable, recipe now published</span></dd>
           </dl>
         </div>
       </div>
@@ -484,8 +484,8 @@
           </tr>
           <tr>
             <td><span class="cap">Reinterpret on retrieval, not fetch</span><span class="cap-src">L2 · Levin bowtie</span></td>
-            <td><span class="pill warn">Buildable, tuning-limited</span></td>
-            <td class="reason">Synthesis over retrieved context is easy to wire. Keeping reinterpretation useful instead of hallucinated is an unsolved control problem.</td>
+            <td><span class="pill warn">Buildable, recipe now published</span></td>
+            <td class="reason">NapMem's GRPO-trained navigation is measured evidence that active reinterpretation beats passive retrieval with the same sources. Keeping it trustworthy instead of hallucinated over long horizons remains an unsolved control problem.</td>
           </tr>
           <tr>
             <td><span class="cap">Salience that gates encoding + behavior</span><span class="cap-src">L3 · Damasio + Conway</span></td>
@@ -530,7 +530,7 @@
     <div class="verdict-cards">
       <div class="vcard">
         <h3><i class="dot-good"></i> Build this now</h3>
-        <p><b>Layers 1 through 3 are a real product.</b> A hierarchical, goal-gated, salience-weighted memory that reconstructs on retrieval instead of fetching is assemblable from mature parts today. It would already beat flat vector recall on the failure mode Youssef names: coherence past ten thousand documents.</p>
+        <p><b>Layers 1 through 3 are a real product.</b> A hierarchical, goal-gated, salience-weighted memory that reconstructs on retrieval instead of fetching is assemblable from mature parts today. It would already beat flat vector recall on the failure mode Youssef names: coherence past ten thousand documents. Layers 1 and 2 now have measured engineering evidence behind them in NapMem.</p>
         <p>The catch on Layer 2 and the harder half of Layer 3 is quality, not feasibility. You can wire it; making reinterpretation trustworthy is the tuning problem.</p>
       </div>
       <div class="vcard">
@@ -543,6 +543,7 @@
     <div class="callout">
       <h3>The Levin layer is the honest unknown</h3>
       <p>Layer 5 is not "hard to build," it is "unclear the material can hold it." Levin's claim is that memory is an active, agential, substrate-independent pattern. On an LLM plus a vector database, memory is passive data you look up. You can imitate the read side of polycomputing, but the write side (an engram that reshapes the agent that carries it) has no home on this substrate.</p>
+      <p>NapMem sharpens this question without answering it. It shows the functional layer (hierarchy plus active reinterpretation) delivers competitive results on a perfectly ordinary substrate, so the question is no longer "can we build good agent memory" but "is there a ceiling the ordinary substrate imposes that only genuine substrate flexibility can break?"</p>
       <p class="q">The open question the wiki flags directly: can any engineered substrate support the Levin layer at all, or does the LLM-plus-index floor cap how much identity-coherence you can ever reach? Reservoir computing and neuromorphic hardware are the named candidates, and neither is wired into an agent stack yet.</p>
     </div>
   </div>
@@ -550,9 +551,9 @@
 
 <footer>
   <div class="wrap">
-    <b>Source:</b> memory-podcast-substrate-site
+    <b>Source:</b> memory-as-navigation-site
     <span>·</span>
-    <span>Synthesizing Conway (2005), Damasio, Bruner, Klein &amp; Nichols via Youssef (2026), and Levin (2024).</span>
+    <span>Synthesizing Conway (2005), Damasio, Bruner, Klein &amp; Nichols via Youssef (2026), Levin (2024), and Xu et al. (2026) for measured engineering evidence.</span>
     <span>·</span>
     <span>Verdicts are a read of 2026 tooling, not a spec.</span>
     <span>·</span>
