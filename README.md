@@ -10,7 +10,6 @@ The thesis it is built on: *memory is not storage to be retrieved; it is the act
 - **Living-loop mental model:** https://ianpilon.github.io/agent-memory-architecture/living-loop.html
 - **Construction loop:** https://ianpilon.github.io/agent-memory-architecture/construction-loop.html
 - **Ecosystem map:** https://ianpilon.github.io/agent-memory-architecture/ecosystem.html
-- **Client scoping template:** https://ianpilon.github.io/agent-memory-architecture/client-template.html
 
 ## The five layers
 
@@ -44,4 +43,3 @@ A two-page published document, served by GitHub Pages from `main`. No build step
 - `living-loop.html` — the same system drawn as a closed loop a self is reconstructed on
 - `construction-loop.html` — the function-level construction process (encode, consolidate, reconstruct, synthesize) lined up against its biological and engineered substrates; the visual of the "functionally homologous, materially different" thesis
 - `ecosystem.html` — the provenance map: how all seven sources flow through the synthesis into the derived artifacts
-- `client-template.html` — the one-page scoping doc for a real client build, derived from the above
