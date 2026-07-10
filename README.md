@@ -8,6 +8,7 @@ The thesis it is built on: *memory is not storage to be retrieved; it is the act
 
 - **Five-layer architecture:** https://ianpilon.github.io/agent-memory-architecture/
 - **Living-loop mental model:** https://ianpilon.github.io/agent-memory-architecture/living-loop.html
+- **Ecosystem map:** https://ianpilon.github.io/agent-memory-architecture/ecosystem.html
 
 ## The five layers
 
@@ -38,3 +39,4 @@ A two-page published document, served by GitHub Pages from `main`. No build step
 
 - `index.html` — the five-layer architecture, data-flow diagrams, and the verdict ledger
 - `living-loop.html` — the same system drawn as a closed loop a self is reconstructed on
+- `ecosystem.html` — the provenance map: how all eight sources flow through the synthesis into the derived artifacts

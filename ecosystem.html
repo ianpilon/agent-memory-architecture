@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The Memory as Navigation ecosystem: how eight sources flow through a five-layer synthesis into the derived artifacts, and where each idea originated.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%97%BA%EF%B8%8F</text></svg>">
+<style>*{margin:0;padding:0}img{max-width:100%}</style>
+<title>The Memory as Navigation Ecosystem</title>
+<style>
+  :root {
+    --bg: #E7EBEB; --card: #FBFCFC; --card-2: #F1F4F4;
+    --ink: #17221F; --muted: #566462; --faint: #7C8B88;
+    --line: #D3DBDA; --line-strong: #BFC9C8;
+    --accent: #0E7A70; --accent-2: #14988B; --accent-ghost: rgba(20,152,139,.10);
+    --life: #C6702A; --life-ghost: rgba(198,112,42,.12);
+    --good: #2E8B4E; --warn: #B07A12; --frontier: #C25E2A; --blocked: #B23F3F;
+    --shadow: 0 1px 2px rgba(20,34,31,.05), 0 8px 26px rgba(20,34,31,.07);
+    --serif: ui-serif, "Charter", "Iowan Old Style", "Palatino", Georgia, serif;
+    --sans: ui-sans-serif, -apple-system, "Helvetica Neue", "Segoe UI", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Menlo", "Cascadia Code", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0C1013; --card: #131A1D; --card-2: #0F1518;
+      --ink: #E7EEEC; --muted: #97A6A3; --faint: #6E7D7A;
+      --line: #212B2E; --line-strong: #2C393C;
+      --accent: #2FC6B6; --accent-2: #37D3C2; --accent-ghost: rgba(47,198,182,.09);
+      --life: #E39152; --life-ghost: rgba(227,145,82,.13);
+      --good: #4FBE6E; --warn: #DCA93B; --frontier: #E3834A; --blocked: #E25C5C;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 34px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="light"]{--bg:#E7EBEB;--card:#FBFCFC;--card-2:#F1F4F4;--ink:#17221F;--muted:#566462;--faint:#7C8B88;--line:#D3DBDA;--line-strong:#BFC9C8;--accent:#0E7A70;--accent-2:#14988B;--accent-ghost:rgba(20,152,139,.10);--life:#C6702A;--life-ghost:rgba(198,112,42,.12);--good:#2E8B4E;--warn:#B07A12;--frontier:#C25E2A;--blocked:#B23F3F;--shadow:0 1px 2px rgba(20,34,31,.05),0 8px 26px rgba(20,34,31,.07);}
+  :root[data-theme="dark"]{--bg:#0C1013;--card:#131A1D;--card-2:#0F1518;--ink:#E7EEEC;--muted:#97A6A3;--faint:#6E7D7A;--line:#212B2E;--line-strong:#2C393C;--accent:#2FC6B6;--accent-2:#37D3C2;--accent-ghost:rgba(47,198,182,.09);--life:#E39152;--life-ghost:rgba(227,145,82,.13);--good:#4FBE6E;--warn:#DCA93B;--frontier:#E3834A;--blocked:#E25C5C;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 34px rgba(0,0,0,.4);}
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.6; font-size: 17px; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--accent); }
+
+  header { padding: 64px 0 30px; border-bottom: 1px solid var(--line); }
+  .eyebrow { font-family: var(--mono); font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .eyebrow::before { content: ""; width: 26px; height: 1px; background: var(--accent); }
+  h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(32px, 5.2vw, 52px); line-height: 1.05; letter-spacing: -.01em; margin: 0 0 18px; text-wrap: balance; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede { font-size: clamp(17px,2.2vw,20px); color: var(--muted); max-width: 66ch; margin: 0; }
+  .lede b { color: var(--ink); font-weight: 600; }
+
+  /* map stage */
+  .stage { margin: 30px 0 8px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 18px 14px 6px; overflow: hidden; }
+  .stage svg { width: 100%; height: auto; display: block; }
+  .cap { text-align: center; font-family: var(--mono); font-size: 12px; color: var(--faint); letter-spacing: .03em; padding: 8px 12px 14px; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 10px 22px; margin: 18px 2px 4px; padding: 16px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; }
+  .legend .grp { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+  .legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .legend .swatch { width: 26px; height: 0; border-top: 2.5px solid; display: inline-block; }
+  .legend .dashed { border-top-style: dashed; }
+  .legend .dotted { border-top: 2px dotted var(--faint); }
+
+  section { padding: 52px 0; border-bottom: 1px solid var(--line); }
+  .kicker { font-family: var(--mono); font-size: 12px; letter-spacing: .13em; text-transform: uppercase; color: var(--faint); margin-bottom: 12px; }
+  h2 { font-family: var(--serif); font-weight: 600; font-size: clamp(24px,3.3vw,31px); line-height: 1.12; letter-spacing: -.01em; margin: 0 0 8px; text-wrap: balance; }
+  .section-head { margin-bottom: 28px; max-width: 68ch; }
+  .section-head p { margin: 8px 0 0; color: var(--muted); }
+
+  /* origins grid */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+  .src { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 17px; box-shadow: var(--shadow); border-left: 4px solid var(--line); }
+  .src.psych { border-left-color: var(--good); }
+  .src.bio { border-left-color: var(--life); }
+  .src.eng { border-left-color: var(--accent); }
+  .src.measured { border-left-color: var(--accent-2); }
+  .src.crit { border-left-color: var(--warn); }
+  .src.outlier { border-left-color: var(--faint); opacity: .82; }
+  .src .top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 6px; }
+  .src .name { font-family: var(--serif); font-size: 16.5px; font-weight: 600; }
+  .src .yr { font-family: var(--mono); font-size: 11px; color: var(--faint); }
+  .src .role { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); margin-bottom: 8px; }
+  .src .contrib { font-size: 14px; color: var(--muted); margin: 0; }
+  .src .contrib b { color: var(--ink); font-weight: 600; }
+
+  /* spine layers */
+  .stack { display: flex; flex-direction: column; gap: 12px; }
+  .lay { background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); display: grid; grid-template-columns: 54px 1fr; }
+  .lay .rail { border-right: 1px solid var(--line); background: var(--card-2); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 14px 0; }
+  .lay .rail .n { font-family: var(--mono); font-size: 16px; font-weight: 600; color: var(--accent); }
+  .lay .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .lay .body { padding: 14px 20px; }
+  .lay .body .t { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+  .lay .body h3 { font-family: var(--serif); font-size: 18px; font-weight: 600; margin: 0; }
+  .lay .body .from { font-family: var(--mono); font-size: 11px; color: var(--faint); }
+  .lay .body p { margin: 6px 0 0; font-size: 14.5px; color: var(--muted); }
+  .lay .body p b { color: var(--ink); }
+  .dot.good { background: var(--good); } .dot.warn { background: var(--warn); } .dot.frontier { background: var(--frontier); } .dot.blocked { background: var(--blocked); }
+  .pill { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 3px 9px 3px 7px; border-radius: 100px; }
+  .pill.good { color: var(--good); background: rgba(46,139,78,.12); }
+  .pill.warn { color: var(--warn); background: rgba(176,122,18,.13); }
+  .pill.frontier { color: var(--frontier); background: rgba(194,94,42,.13); }
+  .pill.blocked { color: var(--blocked); background: rgba(178,63,63,.12); }
+
+  .thesis-card { background: var(--accent-ghost); border: 1px solid var(--accent); border-radius: 12px; padding: 18px 20px; margin-bottom: 14px; }
+  .thesis-card .kicker { color: var(--accent); margin-bottom: 8px; }
+  .thesis-card p { margin: 0; font-family: var(--serif); font-size: 17px; color: var(--ink); }
+  .thesis-card p + p { margin-top: 8px; font-family: var(--sans); font-size: 14.5px; color: var(--muted); }
+
+  /* artifacts */
+  .arts { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .art { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; box-shadow: var(--shadow); }
+  .art .ico { font-size: 22px; }
+  .art .name { font-family: var(--serif); font-size: 17px; font-weight: 600; margin: 6px 0 2px; }
+  .art .where { font-family: var(--mono); font-size: 11px; color: var(--accent); margin-bottom: 8px; word-break: break-all; }
+  .art p { margin: 0; font-size: 14px; color: var(--muted); }
+
+  /* live edges */
+  .edges { display: flex; flex-direction: column; gap: 12px; }
+  .edge { background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--warn); border-radius: 10px; padding: 14px 18px; box-shadow: var(--shadow); }
+  .edge h3 { font-family: var(--serif); font-size: 16.5px; font-weight: 600; margin: 0 0 4px; }
+  .edge .stat { font-family: var(--mono); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--warn); margin-bottom: 6px; }
+  .edge.resolved { border-left-color: var(--good); }
+  .edge.resolved .stat { color: var(--good); }
+  .edge p { margin: 0; font-size: 14.5px; color: var(--muted); }
+
+  /* journey timeline */
+  .tl { position: relative; margin-top: 8px; padding-left: 8px; }
+  .tl::before { content: ""; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 2px; background: var(--line-strong); }
+  .tl .mile { position: relative; padding: 0 0 26px 34px; }
+  .tl .mile::before { content: ""; position: absolute; left: 1px; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--card); border: 3px solid var(--accent); }
+  .tl .mile.bio::before { border-color: var(--life); }
+  .tl .mile.synth::before { border-color: var(--accent-2); }
+  .tl .mile.you::before { border-color: var(--frontier); background: var(--frontier); }
+  .tl .when { font-family: var(--mono); font-size: 11.5px; letter-spacing: .04em; color: var(--faint); }
+  .tl .what { font-family: var(--serif); font-size: 16px; font-weight: 600; margin: 1px 0 2px; }
+  .tl .desc { font-size: 14.5px; color: var(--muted); margin: 0; max-width: 64ch; }
+
+  footer { padding: 40px 0 60px; color: var(--faint); font-size: 13.5px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; }
+  footer b { color: var(--muted); font-weight: 600; }
+
+  @media (max-width: 760px) {
+    .lay { grid-template-columns: 46px 1fr; }
+    .legend { gap: 8px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">The ecosystem</div>
+    <h1>Where it all <em>connects</em></h1>
+    <p class="lede">One map of the whole body of work: eight sources flowing through a five-layer synthesis into the artifacts you can actually point at, with every line showing <b>where an idea originated</b> and <b>what it now feeds</b>. Read it as the map of a learning journey that is still live.</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="stage">
+    <svg viewBox="0 0 1040 700" role="img" aria-label="Ecosystem provenance map. Eight sources on the left connect by colored lines to five layers in the center, which synthesize into five derived works on the right.">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>
+        </marker>
+      </defs>
+
+      <!-- column headers -->
+      <text x="145" y="36" font-family="var(--mono)" font-size="11" letter-spacing="1.5" fill="var(--faint)" text-anchor="middle">SOURCES</text>
+      <text x="530" y="36" font-family="var(--mono)" font-size="11" letter-spacing="1.5" fill="var(--accent)" text-anchor="middle">SYNTHESIS</text>
+      <text x="915" y="36" font-family="var(--mono)" font-size="11" letter-spacing="1.5" fill="var(--faint)" text-anchor="middle">DERIVED WORKS</text>
+
+      <!-- provenance lines (drawn behind nodes) -->
+      <g fill="none" stroke-width="1.8" opacity="0.55">
+        <!-- Conway -> L1,L2,L3 -->
+        <path d="M250,95 C335,95 335,150 420,150" stroke="var(--good)"/>
+        <path d="M250,95 C335,95 335,240 420,240" stroke="var(--good)"/>
+        <path d="M250,95 C335,95 335,330 420,330" stroke="var(--good)"/>
+        <!-- Levin paper -> L2,L5 -->
+        <path d="M250,170 C335,170 335,240 420,240" stroke="var(--life)"/>
+        <path d="M250,170 C335,170 335,510 420,510" stroke="var(--life)"/>
+        <!-- Levin blog -> L2,L5 -->
+        <path d="M250,245 C335,245 335,240 420,240" stroke="var(--life)"/>
+        <path d="M250,245 C335,245 335,510 420,510" stroke="var(--life)"/>
+        <!-- Youssef -> L1,L2,L3,L4 -->
+        <path d="M250,320 C335,320 335,150 420,150" stroke="var(--accent)"/>
+        <path d="M250,320 C335,320 335,240 420,240" stroke="var(--accent)"/>
+        <path d="M250,320 C335,320 335,330 420,330" stroke="var(--accent)"/>
+        <path d="M250,320 C335,320 335,420 420,420" stroke="var(--accent)"/>
+        <!-- NapMem -> L1,L2 (measured, dashed) -->
+        <path d="M250,395 C335,395 335,150 420,150" stroke="var(--accent-2)" stroke-dasharray="6 5"/>
+        <path d="M250,395 C335,395 335,240 420,240" stroke="var(--accent-2)" stroke-dasharray="6 5"/>
+        <!-- Proactive -> L2 (measured, dashed) -->
+        <path d="M250,470 C335,470 335,240 420,240" stroke="var(--accent-2)" stroke-dasharray="6 5"/>
+        <!-- Schleisman Promise -> L5 (critique, faint dotted) -->
+        <path d="M250,545 C335,545 335,510 420,510" stroke="var(--warn)" stroke-dasharray="2 5" opacity="0.7"/>
+      </g>
+
+      <!-- spine vertical (thesis through layers) -->
+      <line x1="530" y1="92" x2="530" y2="540" stroke="var(--line-strong)" stroke-width="2"/>
+
+      <!-- synthesize arrow spine -> works -->
+      <path d="M650,300 L816,300" fill="none" stroke="var(--accent)" stroke-width="2.2" marker-end="url(#arr)"/>
+      <text x="733" y="292" font-family="var(--mono)" font-size="10.5" letter-spacing="1" fill="var(--faint)" text-anchor="middle">synthesizes into</text>
+
+      <!-- THESIS node -->
+      <g>
+        <rect x="410" y="58" width="240" height="56" rx="12" fill="var(--accent-ghost)" stroke="var(--accent)" stroke-width="1.6"/>
+        <text x="530" y="82" font-family="var(--serif)" font-size="15" font-weight="600" fill="var(--ink)" text-anchor="middle">MEMORY AS NAVIGATION</text>
+        <text x="530" y="100" font-family="var(--sans)" font-size="11.5" fill="var(--muted)" text-anchor="middle">the synthesis thesis · the verb all five share</text>
+      </g>
+
+      <!-- LAYER nodes -->
+      <!-- L1 -->
+      <g>
+        <rect x="420" y="120" width="220" height="60" rx="10" fill="var(--card)" stroke="var(--line)"/>
+        <rect x="420" y="120" width="6" height="60" fill="var(--good)"/>
+        <text x="438" y="143" font-family="var(--mono)" font-size="10.5" fill="var(--faint)">L1</text>
+        <text x="438" y="161" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">Hierarchy + goal-filter</text>
+        <text x="632" y="143" font-family="var(--mono)" font-size="9.5" fill="var(--good)" text-anchor="end">SHIPPABLE</text>
+      </g>
+      <!-- L2 -->
+      <g>
+        <rect x="420" y="210" width="220" height="60" rx="10" fill="var(--card)" stroke="var(--line)"/>
+        <rect x="420" y="210" width="6" height="60" fill="var(--warn)"/>
+        <text x="438" y="233" font-family="var(--mono)" font-size="10.5" fill="var(--faint)">L2</text>
+        <text x="438" y="251" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">Active reinterpretation</text>
+        <text x="632" y="233" font-family="var(--mono)" font-size="9.5" fill="var(--warn)" text-anchor="end">BUILDABLE</text>
+      </g>
+      <!-- L3 -->
+      <g>
+        <rect x="420" y="300" width="220" height="60" rx="10" fill="var(--card)" stroke="var(--line)"/>
+        <rect x="420" y="300" width="6" height="60" fill="var(--warn)"/>
+        <text x="438" y="323" font-family="var(--mono)" font-size="10.5" fill="var(--faint)">L3</text>
+        <text x="438" y="341" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">Salience / emotion</text>
+        <text x="632" y="323" font-family="var(--mono)" font-size="9.5" fill="var(--warn)" text-anchor="end">BUILDABLE</text>
+      </g>
+      <!-- L4 -->
+      <g>
+        <rect x="420" y="390" width="220" height="60" rx="10" fill="var(--card)" stroke="var(--line)"/>
+        <rect x="420" y="390" width="6" height="60" fill="var(--frontier)"/>
+        <text x="438" y="413" font-family="var(--mono)" font-size="10.5" fill="var(--faint)">L4</text>
+        <text x="438" y="431" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">Narrative + self-model</text>
+        <text x="632" y="413" font-family="var(--mono)" font-size="9.5" fill="var(--frontier)" text-anchor="end">FRONTIER</text>
+      </g>
+      <!-- L5 -->
+      <g>
+        <rect x="420" y="480" width="220" height="60" rx="10" fill="var(--card)" stroke="var(--line)"/>
+        <rect x="420" y="480" width="6" height="60" fill="var(--blocked)"/>
+        <text x="438" y="503" font-family="var(--mono)" font-size="10.5" fill="var(--faint)">L5</text>
+        <text x="438" y="521" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">Substrate flexibility</text>
+        <text x="632" y="503" font-family="var(--mono)" font-size="9.5" fill="var(--blocked)" text-anchor="end">BLOCKED</text>
+      </g>
+
+      <!-- SOURCE nodes -->
+      <!-- 1 Conway -->
+      <g>
+        <rect x="40" y="70" width="210" height="50" rx="10" fill="var(--card)" stroke="var(--line)"/>
+        <circle cx="58" cy="95" r="5" fill="var(--good)"/>
+        <text x="236" y="86" font-family="var(--mono)" font-size="10.5" fill="var(--faint)" text-anchor="end">2005</text>
+        <text x="72" y="92" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">Conway</text>
+        <text x="72" y="108" font-family="var(--sans)" font-size="11" fill="var(--muted)">Self-Memory System · psychology</text>
+      </g>
+      <!-- 2 Levin paper -->
+      <g>
+        <rect x="40" y="145" width="210" height="50" rx="10" fill="var(--card)" stroke="var(--line)"/>
+        <circle cx="58" cy="170" r="5" fill="var(--life)"/>
+        <text x="236" y="161" font-family="var(--mono)" font-size="10.5" fill="var(--faint)" text-anchor="end">2024</text>
+        <text x="72" y="167" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">Levin (paper)</text>
+        <text x="72" y="183" font-family="var(--sans)" font-size="11" fill="var(--muted)">Self-Improvising Memory · biology</text>
+      </g>
+      <!-- 3 Levin blog -->
+      <g>
+        <rect x="40" y="220" width="210" height="50" rx="10" fill="var(--card)" stroke="var(--line)"/>
+        <circle cx="58" cy="245" r="5" fill="var(--life)"/>
+        <text x="236" y="236" font-family="var(--mono)" font-size="10.5" fill="var(--faint)" text-anchor="end">2024</text>
+        <text x="72" y="242" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">Levin (blog)</text>
+        <text x="72" y="258" font-family="var(--sans)" font-size="11" fill="var(--muted)">blog + thread · biology</text>
+      </g>
+      <!-- 4 Youssef -->
+      <g>
+        <rect x="40" y="295" width="210" height="50" rx="10" fill="var(--card)" stroke="var(--line)"/>
+        <circle cx="58" cy="320" r="5" fill="var(--accent)"/>
+        <text x="236" y="311" font-family="var(--mono)" font-size="10.5" fill="var(--faint)" text-anchor="end">2026</text>
+        <text x="72" y="317" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">Youssef</text>
+        <text x="72" y="333" font-family="var(--sans)" font-size="11" fill="var(--muted)">five principles · AI engineering</text>
+      </g>
+      <!-- 5 NapMem -->
+      <g>
+        <rect x="40" y="370" width="210" height="50" rx="10" fill="var(--card)" stroke="var(--line)"/>
+        <circle cx="58" cy="395" r="5" fill="var(--accent-2)"/>
+        <text x="236" y="386" font-family="var(--mono)" font-size="10.5" fill="var(--faint)" text-anchor="end">2026</text>
+        <text x="72" y="392" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">NapMem (Xu et al.)</text>
+        <text x="72" y="408" font-family="var(--sans)" font-size="11" fill="var(--muted)">memory as action space · measured</text>
+      </g>
+      <!-- 6 Proactive -->
+      <g>
+        <rect x="40" y="445" width="210" height="50" rx="10" fill="var(--card)" stroke="var(--line)"/>
+        <circle cx="58" cy="470" r="5" fill="var(--accent-2)"/>
+        <text x="236" y="461" font-family="var(--mono)" font-size="10.5" fill="var(--faint)" text-anchor="end">2026</text>
+        <text x="72" y="467" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">Proactive (Wu et al.)</text>
+        <text x="72" y="483" font-family="var(--sans)" font-size="11" fill="var(--muted)">memory as intervention · measured</text>
+      </g>
+      <!-- 7 Schleisman Promise -->
+      <g>
+        <rect x="40" y="520" width="210" height="50" rx="10" fill="var(--card)" stroke="var(--line)"/>
+        <circle cx="58" cy="545" r="5" fill="var(--warn)"/>
+        <text x="236" y="536" font-family="var(--mono)" font-size="10.5" fill="var(--faint)" text-anchor="end">2026</text>
+        <text x="72" y="542" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">Schleisman</text>
+        <text x="72" y="558" font-family="var(--sans)" font-size="11" fill="var(--muted)">Promise of AGI · critique</text>
+      </g>
+      <!-- 8 Schleisman HR (outlier, no line) -->
+      <g opacity="0.8">
+        <rect x="40" y="595" width="210" height="50" rx="10" fill="var(--card)" stroke="var(--line)" stroke-dasharray="4 4"/>
+        <circle cx="58" cy="620" r="5" fill="var(--faint)"/>
+        <text x="236" y="611" font-family="var(--mono)" font-size="10.5" fill="var(--faint)" text-anchor="end">2026</text>
+        <text x="72" y="617" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">Schleisman</text>
+        <text x="72" y="633" font-family="var(--sans)" font-size="11" fill="var(--muted)">Human-Ready Tech · outlier</text>
+      </g>
+
+      <!-- WORK nodes -->
+      <g>
+        <rect x="820" y="142" width="190" height="56" rx="10" fill="var(--card)" stroke="var(--line)"/>
+        <text x="836" y="167" font-size="16">📓</text>
+        <text x="862" y="164" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">Obsidian vault</text>
+        <text x="862" y="180" font-family="var(--sans)" font-size="11" fill="var(--muted)">source of truth</text>
+      </g>
+      <g>
+        <rect x="820" y="227" width="190" height="56" rx="10" fill="var(--card)" stroke="var(--line)"/>
+        <text x="836" y="252" font-size="16">🌐</text>
+        <text x="862" y="249" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">Wiki site</text>
+        <text x="862" y="265" font-family="var(--sans)" font-size="11" fill="var(--muted)">Nextra · Vercel</text>
+      </g>
+      <g>
+        <rect x="820" y="312" width="190" height="56" rx="10" fill="var(--card)" stroke="var(--line)"/>
+        <text x="836" y="337" font-size="16">🧱</text>
+        <text x="862" y="334" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">Architecture doc</text>
+        <text x="862" y="350" font-family="var(--sans)" font-size="11" fill="var(--muted)">five layers · this site</text>
+      </g>
+      <g>
+        <rect x="820" y="397" width="190" height="56" rx="10" fill="var(--card)" stroke="var(--line)"/>
+        <text x="836" y="422" font-size="16">🌀</text>
+        <text x="862" y="419" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">Living-loop model</text>
+        <text x="862" y="435" font-family="var(--sans)" font-size="11" fill="var(--muted)">mental model</text>
+      </g>
+      <g>
+        <rect x="820" y="482" width="190" height="56" rx="10" fill="var(--card)" stroke="var(--line)"/>
+        <text x="836" y="507" font-size="16">📋</text>
+        <text x="862" y="504" font-family="var(--serif)" font-size="14.5" font-weight="600" fill="var(--ink)">Client template</text>
+        <text x="862" y="520" font-family="var(--sans)" font-size="11" fill="var(--muted)">scoping · two-agent split</text>
+      </g>
+    </svg>
+    <div class="cap">follow any line left-to-right: a source · what it informs · what it became</div>
+  </div>
+
+  <div class="legend">
+    <div class="grp"><i style="background:var(--good)"></i> psychology (Conway)</div>
+    <div class="grp"><i style="background:var(--life)"></i> biology (Levin)</div>
+    <div class="grp"><i style="background:var(--accent)"></i> AI engineering · principles (Youssef)</div>
+    <div class="grp"><i style="background:var(--accent-2)"></i> AI engineering · measured (NapMem, Proactive)</div>
+    <div class="grp"><i style="background:var(--warn)"></i> critique (Schleisman)</div>
+    <div class="grp"><span class="swatch dashed" style="border-color:var(--accent-2)"></span> measured corroboration</div>
+    <div class="grp"><span class="swatch dotted"></span> critique / loose fit</div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Stratum 1 · origins</div>
+      <h2>Eight sources, three domains, one question</h2>
+      <p>Everything downstream starts here. The left column of the map. Each source seeded specific concepts; the colored line tells you which layer it now feeds.</p>
+    </div>
+    <div class="grid">
+      <div class="src psych">
+        <div class="top"><span class="name">Conway</span><span class="yr">2005</span></div>
+        <div class="role">Psychology</div>
+        <p class="contrib"><b>Self-Memory System.</b> Memory and self are bidirectionally coupled; retrieval is reconstruction. Seeds the working self, the autobiographical hierarchy, coherence vs correspondence.</p>
+      </div>
+      <div class="src bio">
+        <div class="top"><span class="name">Levin (paper)</span><span class="yr">2024</span></div>
+        <div class="role">Biology</div>
+        <p class="contrib"><b>Self-Improvising Memory.</b> Memory as agential cognitive glue, scale-free across cells and lineages. Seeds the bowtie, polycomputing, memories-as-agents.</p>
+      </div>
+      <div class="src bio">
+        <div class="top"><span class="name">Levin (blog)</span><span class="yr">2024</span></div>
+        <div class="role">Biology · supplement</div>
+        <p class="contrib"><b>The no-single-substrate claim, sharpened.</b> "Synaptic machinery is for interpretation, not storage." Also bridges to Barrett, Jung, IFS, RL.</p>
+      </div>
+      <div class="src eng">
+        <div class="top"><span class="name">Youssef</span><span class="yr">2026</span></div>
+        <div class="role">AI engineering · principles</div>
+        <p class="contrib"><b>Five principles AI memory lacks.</b> Synthesizes Conway, Damasio, Bruner, Klein &amp; Nichols into an engineering punch list. The principles layer of the architecture.</p>
+      </div>
+      <div class="src measured">
+        <div class="top"><span class="name">NapMem · Xu et al.</span><span class="yr">2026</span></div>
+        <div class="role">AI engineering · measured</div>
+        <p class="contrib"><b>Memory as an action space.</b> First measured evidence in the wiki. Its pyramid re-derives Conway's hierarchy; its ablation proves active use beats passive retrieval.</p>
+      </div>
+      <div class="src measured">
+        <div class="top"><span class="name">Proactive · Wu et al.</span><span class="yr">2026</span></div>
+        <div class="role">AI engineering · measured</div>
+        <p class="contrib"><b>Memory as intervention.</b> A separate memory agent decides whether to inject or stay silent. Names behavioral state decay; the silence action beats always-on injection.</p>
+      </div>
+      <div class="src crit">
+        <div class="top"><span class="name">Schleisman</span><span class="yr">2026</span></div>
+        <div class="role">Critique</div>
+        <p class="contrib"><b>Promise of AGI &amp; neuroscience.</b> Brains have at least five features LLMs lack. Sits between Conway (specific substrate) and Levin (no single substrate).</p>
+      </div>
+      <div class="src outlier">
+        <div class="top"><span class="name">Schleisman</span><span class="yr">2026</span></div>
+        <div class="role">Outlier · loose fit</div>
+        <p class="contrib"><b>Is Your Technology Human-Ready?</b> About deployment ergonomics, not memory. First candidate to prune. Unconnected on the map on purpose.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Stratum 2 · the synthesis spine</div>
+      <h2>How the sources combine into five buildable layers</h2>
+      <p>The center column of the map. The sources do not agree on everything, but they converge on one thesis and split cleanly into five layers, each with a lineage and a verdict.</p>
+    </div>
+
+    <div class="thesis-card">
+      <div class="kicker">The thesis they share</div>
+      <p>Memory is not storage to be retrieved; it is the active process an agent navigates, and is intervened on, to persist across time.</p>
+      <p>The verb is what unifies them: interpret (Levin), construct (Conway), build identity (Youssef), navigate (NapMem), intervene (Proactive).</p>
+    </div>
+
+    <div class="stack">
+      <div class="lay">
+        <div class="rail"><span class="n">1</span><span class="dot good"></span></div>
+        <div class="body">
+          <div class="t"><h3>Hierarchy and goal-filtering</h3><span class="from">Conway · corroborated by NapMem</span></div>
+          <p>Store memory as a partonomy; let current goals gate access. <b>NapMem's pyramid independently re-derives Conway's hierarchy</b> and ships competitively.</p>
+        </div>
+      </div>
+      <div class="lay">
+        <div class="rail"><span class="n">2</span><span class="dot warn"></span></div>
+        <div class="body">
+          <div class="t"><h3>Active reinterpretation on retrieval</h3><span class="from">Levin (bowtie) · corroborated by NapMem + Proactive</span></div>
+          <p>Retrieval is generation, not lookup. <b>Two measured recipes now exist</b>: NapMem's GRPO-trained navigation and the Proactive agent's selective intervention, whose silence beats always-on injection.</p>
+        </div>
+      </div>
+      <div class="lay">
+        <div class="rail"><span class="n">3</span><span class="dot warn"></span></div>
+        <div class="body">
+          <div class="t"><h3>Salience and emotional weighting</h3><span class="from">Damasio + Conway</span></div>
+          <p>Emotional significance biases encoding, retrieval, and behavior. Scoring is trivial; wiring it into encoding and behavior is the open work. No measured source covers this yet.</p>
+        </div>
+      </div>
+      <div class="lay">
+        <div class="rail"><span class="n">4</span><span class="dot frontier"></span></div>
+        <div class="body">
+          <div class="t"><h3>Narrative layer and co-emergent self-model</h3><span class="from">Bruner + Klein/Nichols</span></div>
+          <p>The agent itself evolves through the relationship. The Proactive agent's private "status" field is a proto-self-model, but no one has shipped L4 well. Research frontier.</p>
+        </div>
+      </div>
+      <div class="lay">
+        <div class="rail"><span class="n">5</span><span class="dot blocked"></span></div>
+        <div class="body">
+          <div class="t"><h3>Substrate flexibility</h3><span class="from">Levin (polycomputing)</span></div>
+          <p>Memory as an active medium, not a parked value. <b>Still blocked</b>: both measured papers run on ordinary storage and do not dissolve the substrate. The honest unknown.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Stratum 3 · the artifacts</div>
+      <h2>What the synthesis actually became</h2>
+      <p>The right column of the map. Ideas are cheap until they live somewhere. These are the five places this body of work is concretely realized, and where each one lives.</p>
+    </div>
+    <div class="arts">
+      <div class="art">
+        <div class="ico">📓</div>
+        <div class="name">Obsidian vault</div>
+        <div class="where">Documents/Obsidian Vault/memory-as-navigation</div>
+        <p>The source of truth. 48 wiki pages in <code>[[slug]]</code> markdown, maintained by hand. Everything else is generated from here.</p>
+      </div>
+      <div class="art">
+        <div class="ico">🌐</div>
+        <div class="name">Wiki site</div>
+        <div class="where">memory-as-navigation-site.vercel.app</div>
+        <p>The published wiki. Nextra + Next.js on Vercel, with a BM25 chat panel and drag-drop ingest. Built from the vault by <code>convert-wiki.py</code>.</p>
+      </div>
+      <div class="art">
+        <div class="ico">🧱</div>
+        <div class="name">Architecture doc</div>
+        <div class="where">ianpilon.github.io/agent-memory-architecture</div>
+        <p>The five-layer reference architecture with build verdicts. The engineering reading of the thesis. You are on a companion to it.</p>
+      </div>
+      <div class="art">
+        <div class="ico">🌀</div>
+        <div class="name">Living-loop model</div>
+        <div class="where">…/agent-memory-architecture/living-loop.html</div>
+        <p>The same system drawn as a closed loop a self is reconstructed on. The mental model that complements the layer stack.</p>
+      </div>
+      <div class="art">
+        <div class="ico">📋</div>
+        <div class="name">Client scoping template</div>
+        <div class="where">Desktop · agent-memory-client-scoping-template.md</div>
+        <p>Turns the research into billable structure: a one-pager that scopes a real build around the two-agent split and the layer checklist.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">The live edges</div>
+      <h2>Where the ecosystem is still unresolved</h2>
+      <p>A healthy map shows its open seams, not just its solid ones. These are the questions the sources disagree on or do not yet answer. They are where the next source would attach.</p>
+    </div>
+    <div class="edges">
+      <div class="edge resolved">
+        <div class="stat">Partially answered</div>
+        <h3>Principles enough, or substrate too?</h3>
+        <p>NapMem and the Proactive agent show the functional layer (hierarchy + reinterpretation + intervention) works on an ordinary substrate. Neither dissolves the substrate, so Levin's no-single-substrate claim stays open.</p>
+      </div>
+      <div class="edge">
+        <div class="stat">Open · deployment-relevant</div>
+        <h3>Monolithic navigation vs separate intervention agent</h3>
+        <p>NapMem trains one model to navigate and answer. The Proactive agent keeps the action agent untouched and adds a cheaper sidecar. Different bets, not yet head-to-head. The split is the better default for real deployments.</p>
+      </div>
+      <div class="edge">
+        <div class="stat">Open · load-bearing</div>
+        <h3>Is synaptic machinery for interpretation, not storage?</h3>
+        <p>Levin's highest-stakes claim, mostly evidenced in invertebrates. Contradicts mainstream vertebrate neuroscience. Would merit its own dedicated source.</p>
+      </div>
+      <div class="edge">
+        <div class="stat">Open · engineering</div>
+        <h3>Narrative coherence has no clean engineering mapping</h3>
+        <p>The fuzziest of the five principles. No published architecture reliably keeps a self-model coherent over long horizons without drift.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">The learning journey</div>
+      <h2>How this built up over twenty-one years</h2>
+      <p>The same ecosystem read as a timeline. One old anchor in psychology, biology arriving in 2024, then a burst of AI-engineering evidence and synthesis in 2026. Your own work is the last three milestones.</p>
+    </div>
+    <div class="tl">
+      <div class="mile">
+        <div class="when">2005</div>
+        <div class="what">Conway · Self-Memory System</div>
+        <p class="desc">The original anchor. Memory reconstructed at retrieval; self and memory bidirectionally coupled. Everything later reuses this vocabulary.</p>
+      </div>
+      <div class="mile bio">
+        <div class="when">2024</div>
+        <div class="what">Levin · Self-Improvising Memory + blog</div>
+        <p class="desc">Biology enters. Memory as agential glue, no single substrate, scale-free. The substrate question is forced open and stays open.</p>
+      </div>
+      <div class="mile synth">
+        <div class="when">Feb 2026</div>
+        <div class="what">Youssef · five principles</div>
+        <p class="desc">The first synthesis for AI engineering. Conway, Damasio, Bruner, Klein &amp; Nichols turned into a buildable punch list.</p>
+      </div>
+      <div class="mile you">
+        <div class="when">May 2026</div>
+        <div class="what">The wiki is built</div>
+        <p class="desc">You ingest six sources into a Karpathy-style wiki. Originally "Memory as Substrate." 32 pages from 118 source pages.</p>
+      </div>
+      <div class="mile synth">
+        <div class="when">Jul 2026 · this week</div>
+        <div class="what">NapMem, then the Proactive agent, then the rename</div>
+        <p class="desc">Two measured papers drop days apart and corroborate layers 1 and 2. The wiki renames itself to Navigation. The architecture doc, living-loop, client template, and this ecosystem map follow.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <b>Companion to</b> the <a href="./">five-layer architecture</a> and the <a href="./living-loop.html">living-loop model</a> · <span>sources: Conway (2005), Levin (2024), Youssef (2026), Xu et al. / NapMem (2026), Wu et al. / Proactive Memory Agent (2026), Schleisman (2026).</span>
+  </div>
+</footer>
+
+</body>
+</html>
