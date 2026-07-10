@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="A substrate model for AI agent memory: a closed loop that continuously reconstructs a self.">
+<meta name="description" content="A loop model for AI agent memory: a closed loop that continuously reconstructs a self.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%8C%80</text></svg>">
 <style>*{margin:0;padding:0}img{max-width:100%}</style>
 <title>Memory as a Living Loop</title>
@@ -108,15 +108,15 @@
 
 <header>
   <div class="wrap">
-    <div class="eyebrow">The substrate model</div>
+    <div class="eyebrow">The loop model</div>
     <h1>Memory as a <em>living loop</em></h1>
-    <p class="lede">Agent memory is not a store you write to and read back. In this model the substrate is a <b>closed loop that continuously reconstructs a self</b>: the stream flows in, is gated by goals, consolidates into a revisable web, and is regrown on the way out. The self at the center is remade by every pass.</p>
+    <p class="lede">Agent memory is not a store you write to and read back. In this model memory is a <b>closed loop that continuously reconstructs a self</b>: the stream flows in, is gated by goals, consolidates into a revisable web, and is regrown on the way out. The self at the center is remade by every pass.</p>
   </div>
 </header>
 
 <div class="wrap">
   <div class="stage">
-    <svg viewBox="0 0 720 660" role="img" aria-label="A circular loop diagram of an AI memory system. A stream enters at the top, passes clockwise through a working-self gate on the right, consolidates into a revisable substrate at the bottom, is reconstructed through a bowtie on the left, and drives action back to the top. A narrative self sits at the center, connected bidirectionally to the loop.">
+    <svg viewBox="0 0 720 660" role="img" aria-label="A circular loop diagram of an AI memory system. A stream enters at the top, passes clockwise through a working-self gate on the right, consolidates into a revisable web at the bottom, is reconstructed through a bowtie on the left, and drives action back to the top. A narrative self sits at the center, connected bidirectionally to the loop.">
       <defs>
         <radialGradient id="core" cx="50%" cy="45%" r="60%">
           <stop offset="0" stop-color="var(--life-2)"/>
@@ -166,7 +166,7 @@
         <text x="130" y="331" font-family="var(--sans)" font-size="12.5" fill="var(--muted)" text-anchor="end">regrow, not fetch</text>
       </g>
 
-      <!-- BOTTOM: revisable substrate (knowledge web) -->
+      <!-- BOTTOM: revisable web (knowledge web) -->
       <g stroke="var(--accent)" stroke-width="1.5" opacity="0.9">
         <line x1="322" y1="520" x2="352" y2="512"/>
         <line x1="352" y1="512" x2="386" y2="522"/>
@@ -227,7 +227,7 @@
         <div class="desc">A filter every item crosses in <b>both directions</b>. What gets encoded, and what is allowed to surface, is decided by the agent's current goals and the emotional weight of the experience, never by raw similarity alone.</div>
       </div>
       <div class="el">
-        <div class="name"><i style="background:var(--accent)"></i>Revisable Substrate</div>
+        <div class="name"><i style="background:var(--accent)"></i>Revisable Web</div>
         <div class="role">knowledge web</div>
         <div class="desc">Consolidated, interconnected, and <b>rewritable</b>. Facts get superseded and the self can forget. Permanence would be a liability: a base that cannot revise itself would, by the conservatism principle, start distorting new input to protect what it already holds.</div>
       </div>
@@ -245,8 +245,8 @@
 
     <div class="engine">
       <h3>The engine: a closed cycle</h3>
-      <p>A <b>background consolidation process</b> runs continuously, pulling the stream down, stripping token noise, and compressing insight into the substrate. This is the part that resembles a conventional memory pipeline, and the model keeps it.</p>
-      <p>What makes it a substrate rather than a store is that the loop <b>closes</b>. Reconstruction feeds action, action changes the world, the world feeds the stream, and the self re-gates the next pass. The self both shapes memory and is shaped by it. That bidirectional coupling, drawn as the orange spokes at the center, is the load-bearing claim of the whole model.</p>
+      <p>A <b>background consolidation process</b> runs continuously, pulling the stream down, stripping token noise, and compressing insight into the web. This is the part that resembles a conventional memory pipeline, and the model keeps it.</p>
+      <p>What makes it a loop rather than a store is that it <b>closes</b>. Reconstruction feeds action, action changes the world, the world feeds the stream, and the self re-gates the next pass. The self both shapes memory and is shaped by it. That bidirectional coupling, drawn as the orange spokes at the center, is the load-bearing claim of the whole model.</p>
     </div>
   </div>
 </section>
@@ -254,7 +254,7 @@
 <section>
   <div class="wrap">
     <div class="kicker">Design commitments</div>
-    <h2>Six properties that make it a substrate, not a store</h2>
+    <h2>Six properties that make it a loop, not a store</h2>
     <div class="contrast-wrap">
       <table>
         <thead>
@@ -262,11 +262,11 @@
         </thead>
         <tbody>
           <tr><td class="o">Closed, not one-way</td><td class="g">Encoding and retrieval are two arcs of a single circuit; the agent's output feeds back into its next input.</td></tr>
-          <tr><td class="o">Revisable, not fixed</td><td class="g">The substrate can be rewritten and can forget. Nothing is permanent, so stale knowledge does not accumulate.</td></tr>
+          <tr><td class="o">Revisable, not fixed</td><td class="g">The web can be rewritten and can forget. Nothing is permanent, so stale knowledge does not accumulate.</td></tr>
           <tr><td class="o">Reconstructed, not fetched</td><td class="g">Retrieval regrows a compressed engram in the present context rather than returning a stored record.</td></tr>
           <tr><td class="o">Gated, not indiscriminate</td><td class="g">Current goals and emotional salience decide what is encoded and what surfaces, in both directions.</td></tr>
           <tr><td class="o">Self-centered, not user-centered</td><td class="g">The core models who the agent is in the relationship, and that self evolves from experience.</td></tr>
-          <tr><td class="o">Substrate-flexible</td><td class="g">Memory is treated as an excitable medium a pattern persists through, not a fixed location a value is parked in.</td></tr>
+          <tr><td class="o">Medium-flexible</td><td class="g">Memory is treated as an excitable medium a pattern persists through, not a fixed location a value is parked in.</td></tr>
         </tbody>
       </table>
     </div>
@@ -275,7 +275,7 @@
 
 <footer>
   <div class="wrap">
-    <b>Companion to</b> the <a href="./">five-layer architecture</a> · <span>Conway, Damasio, Bruner, Klein &amp; Nichols via Youssef, and Levin.</span>
+    <b>Companion to</b> the <a href="./">five-layer architecture</a> · <span>Conway, Damasio, Bruner, Klein &amp; Nichols via Youssef, Levin, Xu et al. / NapMem, and Wu et al. / Proactive Memory Agent.</span>
   </div>
 </footer>
 
