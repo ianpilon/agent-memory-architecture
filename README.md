@@ -4,6 +4,10 @@ A reference architecture for AI agent memory where the agent **persists**, not j
 
 The thesis it is built on: *memory is not storage to be retrieved; it is the active process an agent navigates to persist across time.*
 
+[![The construction loop: one function, two substrates](docs/construction-loop.png)](https://ianpilon.github.io/agent-memory-architecture/construction-loop.html)
+
+The construction loop visualizes the central thesis: the same four-phase process (encode, consolidate, reconstruct, synthesize) runs in a brain and in an engineered agent. Biological memory and AI memory differ at the **substrate**; they share the **function**. See it live: [construction-loop.html](https://ianpilon.github.io/agent-memory-architecture/construction-loop.html).
+
 ## Live pages
 
 - **Five-layer architecture:** https://ianpilon.github.io/agent-memory-architecture/
