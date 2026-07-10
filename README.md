@@ -8,6 +8,7 @@ The thesis it is built on: *memory is not storage to be retrieved; it is the act
 
 - **Five-layer architecture:** https://ianpilon.github.io/agent-memory-architecture/
 - **Living-loop mental model:** https://ianpilon.github.io/agent-memory-architecture/living-loop.html
+- **Construction loop:** https://ianpilon.github.io/agent-memory-architecture/construction-loop.html
 - **Ecosystem map:** https://ianpilon.github.io/agent-memory-architecture/ecosystem.html
 - **Client scoping template:** https://ianpilon.github.io/agent-memory-architecture/client-template.html
 
@@ -31,6 +32,7 @@ Derived from the [Memory as Construction](https://github.com/ianpilon/memory-as-
 - **Levin (2024)** — self-improvising, substrate-agnostic memory (biology)
 - **Youssef (2026)** — five principles AI memory lacks, via Conway, Damasio, Bruner, Klein & Nichols (engineering principles)
 - **Xu et al. (2026) / NapMem** — memory as a structured action space, the first *measured* engineering source; it corroborates layers 1 and 2 with a published GRPO training recipe and sharpens (without resolving) the layer 5 question
+- **Bongard & Levin (2023) / polycomputing** — the dedicated source for substrate flexibility; closes the open question of whether the Levin layer is reachable in engineered systems
 
 Verdicts are a read of 2026 tooling, not a spec.
 
@@ -40,5 +42,6 @@ A two-page published document, served by GitHub Pages from `main`. No build step
 
 - `index.html` — the five-layer architecture, data-flow diagrams, and the verdict ledger
 - `living-loop.html` — the same system drawn as a closed loop a self is reconstructed on
+- `construction-loop.html` — the function-level construction process (encode, consolidate, reconstruct, synthesize) lined up against its biological and engineered substrates; the visual of the "functionally homologous, materially different" thesis
 - `ecosystem.html` — the provenance map: how all seven sources flow through the synthesis into the derived artifacts
 - `client-template.html` — the one-page scoping doc for a real client build, derived from the above
