@@ -323,7 +323,7 @@
           <p>A retrieved memory is a compressed engram with no metadata attached. It cannot be handed back raw. The read side must creatively re-inflate it in the current context, with allegiance to who is asking now, not to who wrote it. Retrieval is generation, not a nearest-neighbor lookup.</p>
           <dl class="layer-eng">
             <dt>Build as</dt>
-            <dd>Replace "return top-k chunks" with "retrieve, then have the model synthesize them against the present task." The mechanism exists (query-focused synthesis), and NapMem now gives it a measured training recipe: expose memory as tools, train the agent with GRPO over memory-tool trajectories, and its navigation ablation shows active use beats passive retrieval with the same sources. Doing it <em>trustworthily over long horizons</em> is still the hard part: the same move that produces useful reinterpretation also produces confabulation and drift.</dd>
+            <dd>Replace "return top-k chunks" with "retrieve, then have the model synthesize them against the present task." The mechanism exists (query-focused synthesis), and two 2026 papers now give it measured form. NapMem (Xu et al.) trains the action agent with GRPO over memory-tool trajectories and shows active navigation beats passive retrieval with the same sources. The Proactive Memory Agent (Wu et al., Meta) goes further: it runs a <em>separate</em> memory agent beside an unmodified action agent, and its ablation shows the win lives in the decision whether to intervene at all, beating passive full-bank exposure and always-on injection. Doing reinterpretation <em>trustworthily over long horizons</em> is still the hard part: the same move that produces useful reinterpretation also produces confabulation and drift.</dd>
             <dt>Verdict</dt>
             <dd><span class="pill warn">Buildable, recipe now published</span></dd>
           </dl>
@@ -446,6 +446,12 @@
       <figcaption>Layer 2 in one shape: the bottleneck strips the metadata, so the far side must interpret, not look up.</figcaption>
     </figure>
     <p class="bowtie-note">This is why a plain vector store fails as identity memory: it treats the narrow waist as an address to fetch from, when the architecture says the waist is a seed that has to be regrown for whoever is asking now.</p>
+
+    <div class="callout" style="border-color: color-mix(in srgb, var(--accent) 30%, var(--line)); background: var(--accent-ghost);">
+      <h3 style="color: var(--ink);">Deployment pattern: run memory as a separate agent</h3>
+      <p>The two measured sources imply different shapes. NapMem trains <em>one</em> model to both navigate memory and answer. The Proactive Memory Agent keeps the action agent untouched and adds a separate memory agent that runs on a fixed interval, deciding whether to inject a reminder or stay silent. Its ablation shows that silence beats always-on injection and passive full-bank exposure.</p>
+      <p>The split is the better default for a real deployment. It lets you size the two models independently (a strong action agent, a cheaper memory sidecar), it works against any frontier action agent you cannot retrain, and the cost lands on a bounded schedule rather than on every query. Build the pyramid as the store (L1), then put a selective intervention agent on top of it (L2).</p>
+    </div>
   </div>
 </section>
 
@@ -485,7 +491,7 @@
           <tr>
             <td><span class="cap">Reinterpret on retrieval, not fetch</span><span class="cap-src">L2 · Levin bowtie</span></td>
             <td><span class="pill warn">Buildable, recipe now published</span></td>
-            <td class="reason">NapMem's GRPO-trained navigation is measured evidence that active reinterpretation beats passive retrieval with the same sources. Keeping it trustworthy instead of hallucinated over long horizons remains an unsolved control problem.</td>
+            <td class="reason">Two measured recipes now exist. NapMem's GRPO-trained navigation and the Proactive Memory Agent's selective intervention both beat passive retrieval with the same sources. Keeping reinterpretation trustworthy instead of hallucinated over long horizons remains an unsolved control problem.</td>
           </tr>
           <tr>
             <td><span class="cap">Salience that gates encoding + behavior</span><span class="cap-src">L3 · Damasio + Conway</span></td>
@@ -544,6 +550,7 @@
       <h3>The Levin layer is the honest unknown</h3>
       <p>Layer 5 is not "hard to build," it is "unclear the material can hold it." Levin's claim is that memory is an active, agential, substrate-independent pattern. On an LLM plus a vector database, memory is passive data you look up. You can imitate the read side of polycomputing, but the write side (an engram that reshapes the agent that carries it) has no home on this substrate.</p>
       <p>NapMem sharpens this question without answering it. It shows the functional layer (hierarchy plus active reinterpretation) delivers competitive results on a perfectly ordinary substrate, so the question is no longer "can we build good agent memory" but "is there a ceiling the ordinary substrate imposes that only genuine substrate flexibility can break?"</p>
+      <p>The Proactive Memory Agent sharpens it further by isolating what actually carries the gains: not the store, and not even active reinterpretation alone, but the <b>selective decision to intervene</b>. Its ablation shows the silence action beats exposing the full bank every step. So the floor is set less by the substrate than by whether the control architecture can decide when memory should enter the loop. That control layer, not the substrate, may be the real ceiling to test.</p>
       <p class="q">The open question the wiki flags directly: can any engineered substrate support the Levin layer at all, or does the LLM-plus-index floor cap how much identity-coherence you can ever reach? Reservoir computing and neuromorphic hardware are the named candidates, and neither is wired into an agent stack yet.</p>
     </div>
   </div>
@@ -553,7 +560,7 @@
   <div class="wrap">
     <b>Source:</b> memory-as-navigation-site
     <span>·</span>
-    <span>Synthesizing Conway (2005), Damasio, Bruner, Klein &amp; Nichols via Youssef (2026), Levin (2024), and Xu et al. (2026) for measured engineering evidence.</span>
+    <span>Synthesizing Conway (2005), Damasio, Bruner, Klein &amp; Nichols via Youssef (2026), Levin (2024), Xu et al. (2026) / NapMem, and Wu et al. (2026) / Proactive Memory Agent for measured engineering evidence.</span>
     <span>·</span>
     <span>Verdicts are a read of 2026 tooling, not a spec.</span>
     <span>·</span>
