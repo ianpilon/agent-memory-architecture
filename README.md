@@ -25,7 +25,7 @@ The bottom line: layers 1 through 3 are an engineering project; layer 4 is a res
 
 ## Sources
 
-Derived from the [Memory as Navigation](https://github.com/ianpilon/memory-as-navigation-site) wiki, which synthesizes:
+Derived from the [Memory as Construction](https://github.com/ianpilon/memory-as-construction-site) wiki, which synthesizes:
 
 - **Conway (2005)** — the Self-Memory System (psychology)
 - **Levin (2024)** — self-improvising, substrate-agnostic memory (biology)
